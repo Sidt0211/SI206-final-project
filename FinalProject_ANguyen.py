@@ -92,9 +92,26 @@ def get_players_for_teams() -> dict:
 
     return teams_with_roster
 
-def highest_perfomance(id): 
-    
-
+def highest_perfomance(team_with_roster,year): 
+    highest_per = -9999
+    highest_name = ""
+    for team_info in team_with_roster.values():
+        roster = team_info.get("roster", {})
+        for player_id in roster.values():
+            player_url = f"https://api.sportradar.com/nba/trial/v8/en/players/{player_id}/profile.json?api_key={API_Key}"
+            headers = {"accept": "application/json"}
+            response = requests.get(player_url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                for season in data.get("seasons", []):
+                     if season.get("year") == year and season.get("type") == "REG":
+                        team_data = season["teams"][0]
+                        average_efficiency = team_data.get("average", {}).get("efficiency")
+                        if average_efficiency > highest_per:
+                            highest_per = average_efficiency
+                            highest_name = data["full_name"]
+    return (highest_name,highest_per)
+                
 def main():
     print(get_players_for_teams())
 
