@@ -3,6 +3,7 @@ import sqlite3
 import json
 import os
 import requests
+import time
 from bs4 import BeautifulSoup
 
 # def read_data_from_file(filename):
@@ -21,6 +22,7 @@ def set_up_database(db_name):
 
     cur.execute('DROP TABLE IF EXISTS ThreePointStats')
     cur.execute('DROP TABLE IF EXISTS Teams')
+    cur.execute('DROP TABLE IF EXISTS WinStats')
     
     # Create Teams table
     cur.execute('''
@@ -40,6 +42,19 @@ def set_up_database(db_name):
             three_pt_percentage REAL,
             three_pt_made INTEGER,
             three_pt_attempts INTEGER,
+            FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+            UNIQUE(team_id, season)
+        )
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS WinStats (
+            stat_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            team_id INTEGER,
+            season TEXT,
+            win_percentage REAL,
+            wins INTEGER,
+            losses INTEGER,
             FOREIGN KEY (team_id) REFERENCES Teams(team_id),
             UNIQUE(team_id, season)
         )
@@ -93,7 +108,7 @@ def get_teams_data(cur, conn):
     conn.commit()
     return counter
 
-def three_point_data(cur, conn, season, max_teams=25):
+def three_point_data(cur, conn, season):
     """Get 3-point shooting percentage data for a specific season"""
     # Season code format example: "2019-20" for 2019-2020 season
     season_code = f"{season.split('-')[0]}-{season.split('-')[1][-2:]}"
@@ -102,28 +117,25 @@ def three_point_data(cur, conn, season, max_teams=25):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Find the team stats table
-    team_stats_table = soup.find('table', id='team-stats-per_game')
+    # Find the team stats table - correct ID for team totals
+    total_stats = soup.find('table', id='totals-team')
     
-    if not team_stats_table:
+    if not total_stats:
         print(f"Could not find team stats for season {season}")
         return 0
     
-    # Get all rows from the table
-    rows = team_stats_table.find_all('tr')[1:]  # Skip header row
+    rows = total_stats.find_all('tr')[1:]  
     
     counter = 0
     for row in rows:
-        if counter >= max_teams:
+        if counter == 30:
             break
-            
+
         cols = row.find_all('td')
         if not cols:
             continue
             
         team_name = cols[0].text.strip()
-        
-        # Find 3PT data (may need adjustment based on actual table structure)
         three_pt_made = float(cols[7].text) if cols[7].text else 0
         three_pt_attempts = float(cols[8].text) if cols[8].text else 0
         three_pt_percentage = float(cols[9].text) if cols[9].text else 0
@@ -148,11 +160,68 @@ def three_point_data(cur, conn, season, max_teams=25):
     return counter
 
 
+def get_win_stats_for_season(cur, conn, season):
+    """Get win percentage data for a specific season"""
+    season_year = season.split('-')[0]
+    url = f"https://www.basketball-reference.com/leagues/NBA_{season_year}.html"
+    
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    teams_processed = 0
+    conferences = ['E', 'W']
+    for conference in conferences:    
+        standings_table = soup.find('table', id=f'confs_standings_{conference}')
+        if not standings_table:
+            print(f"Could not find {conference} conference standings for season {season}")
+            continue
+        
+        rows = standings_table.find_all('tr')[1:]
+        
+        for row in rows:
+            cells = row.find_all(['th', 'td'])
+            if len(cells) < 4:
+                continue
+                
+            team_cell = cells[0]
+            if team_cell.find('a'):
+                team_name = team_cell.find('a').text.strip()
+            else:
+                team_name = team_cell.text.strip()
+                
+            try:
+                wins = int(cells[1].text) if cells[1].text else 0
+                losses = int(cells[2].text) if cells[2].text else 0
+                win_pct = float(cells[3].text) if cells[3].text else 0.0
+                
+                cur.execute("SELECT team_id FROM Teams WHERE team_name = ?", (team_name,))
+                result = cur.fetchone()
+                
+                if result:
+                    team_id = result[0]
+                    cur.execute('''
+                        INSERT OR IGNORE INTO WinStats 
+                        (team_id, season, win_percentage, wins, losses)
+                        VALUES (?, ?, ?, ?, ?)
+                    ''', (team_id, season, win_pct, wins, losses))
+                    
+                    if cur.rowcount > 0:
+                        teams_processed += 1
+                        print(f"Added win stats for {team_name} ({season})")
+            except (ValueError, IndexError) as e:
+                print(f"Error processing win stats for {team_name}: {e}")
+    
+    conn.commit()
+    return teams_processed
+
 
 def main():
     cur, conn = set_up_database("bball-stats.db")
-    teams_added = get_teams_data(cur, conn)  
     
+    # 1. First insert teams data
+    get_teams_data(cur, conn)
+    
+    # 2. Get team stats for each season (limited to 25 entries per run)
     seasons = [
         "2019-2020", 
         "2020-2021", 
@@ -162,10 +231,26 @@ def main():
     ]
     
     for season in seasons:
-        rows_added = three_point_data(cur, conn, season, max_teams=25)
+        print(f"\nProcessing season: {season}")
+        
+        three_point_data(cur, conn, season)
+        time.sleep(2)
+        
+        get_win_stats_for_season(cur, conn, season)
+        time.sleep(2)
+    
+    # "test cases or just to see how much data we got"
+    cur.execute("SELECT COUNT(*) FROM ThreePointStats")
+    total_3pt_stats = cur.fetchone()[0]
+    
+    cur.execute("SELECT COUNT(*) FROM WinStats")
+    total_win_stats = cur.fetchone()[0]
+    
+    print("\nData Collection Summary:")
+    print(f"Total 3-point stats records: {total_3pt_stats}/150 (target: 30 teams × 5 seasons)")
+    print(f"Total win stats records: {total_win_stats}/150 (target: 30 teams × 5 seasons)")
     
     conn.close()
-
 
 if __name__ == "__main__":
     main()
