@@ -1,8 +1,6 @@
 import matplotlib
 import os
-import re
 import requests 
-import unittest
 import sqlite3 
 import json 
 import time
@@ -16,7 +14,7 @@ Outline:
 '''
 API_Key = "iUgGkgFtewzhUNggd2vczYVa7hawxWVdXb2QLpz4"
 
-years = [2024,2023,2022,2021,2020]
+years = [2024,2023,2022]
 
 nba_aliases = [
     "ATL",  # Atlanta Hawks
@@ -60,10 +58,7 @@ def get_team_id() -> dict :
     data = json.loads(response.text)
     team_id_map = {team["alias"]: team["id"] for team in data["teams"] if team.get("alias") in nba_aliases}
     
-    current_directory = os.getcwd()
-    file_path = os.path.join(current_directory, "teams_info.json")
-    with open(file_path, "w",encoding="utf-8-sig") as teams_file:
-        json.dump(data, teams_file, indent=4)
+   
 
     return team_id_map
 
@@ -92,61 +87,92 @@ def get_players_for_teams() -> dict:
             print(f"Error retrieving profile for team {alias} (id: {team_id}). Status code: {response.status_code}")
 
         teams_with_roster[alias] = {"id": team_id, "roster": roster}
-
-        current_directory = os.getcwd()
-        file_path = os.path.join(current_directory, f"{alias}.json")
-        with open(file_path, "w",encoding="utf-8-sig") as playerid_file:
-            json.dump(data, playerid_file, indent=4)
-        time.sleep(5)
+        
+        time.sleep(7)
 
     return teams_with_roster
 
-def collecting_perfomance(team_info:dict,year:int): 
-    highest_per = -9999
+def collecting_perfomance(team_info: dict, year: int) -> dict:
+    highest_per = float("-inf")
     highest_name = ""
     all_per = []
+
     roster = team_info.get("roster", {})
     for player_name, player_id in roster.items():
         player_url = f"https://api.sportradar.com/nba/trial/v8/en/players/{player_id}/profile.json?api_key={API_Key}"
         headers = {"accept": "application/json"}
         response = requests.get(player_url, headers=headers)
+        
+        if response.status_code == 429:
+            print("Rate limit hit. Sleeping for 60 seconds...")
+            time.sleep(60)
+            continue
+    
         if response.status_code == 200:
             data = response.json()
             for season in data.get("seasons", []):
                 if season.get("year") == year and season.get("type") == "REG":
                     team_data = season["teams"][0]
-                    average_efficiency = team_data.get("average", {}).get("efficiency")
-                    all_per.append(average_efficiency)
-                    if average_efficiency > highest_per:
-                        highest_per = average_efficiency
-                        highest_name = data["full_name"]
-    team_avg_per = sum(all_per)/len(all_per)
-    return team_avg_per,highest_per,highest_name
+                    efficiency = team_data.get("average", {}).get("efficiency")
+                    if efficiency is not None:
+                        all_per.append(efficiency)
+                        if efficiency > highest_per:
+                            highest_per = efficiency
+                            highest_name = player_name
+        else:
+            print(f"Failed to get data for {player_name}, status: {response.status_code}")
+        
+        time.sleep(7)  
 
-def get_team_info():
-    teams = get_team_id()  # Mapping alias -> team id
-    teams_with_info = {}
-    for alias, team_id in teams.items():
-        info_url = f"https://api.sportradar.com/nba/trial/v8/en/teams/{team_id}/profile.json?api_key={API_Key}"
-        headers = {"accept": "application/json"}
-        response = requests.get(info_url, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            roster_list = data.get("players", [])
-            roster = {player["full_name"]: player["id"] for player in roster_list if "full_name" in player}
-    pass 
+    team_avg_per = sum(all_per)/len(all_per) if all_per else None
+    return {
+        "Average PER": team_avg_per,
+        "Highest PER": highest_per if highest_per != float("-inf") else None,
+        "Name": highest_name,
+        "Year": year
+    }
+
+
+def dict_for_database():
+    complete_dict = {}
+    #call get players for teams --> a nested dictionary 
+    teams_dict = get_players_for_teams()
+    #traverse the whole dictionary to add avg per, highest per, and name 
+    for year in years:
+        year_dict = {}
+        for alias,team in teams_dict.items():
+            per_stats = collecting_perfomance(team,year)
+            name_only = list(team["roster"].keys())
+            team_entry = {
+                "Alias": alias,
+                "ID": team["id"],
+                "Roster": name_only
+            }
+            team_entry.update(per_stats)
+            year_dict[alias] = team_entry
+        complete_dict[year] = year_dict       
+
+    #endpoint should be a dictionary with this structure: {"Alias": str, "ID": str, "Roster": list, "Average PER": int, "Highest PER": int, "Name":str}
+    return complete_dict
+
+def save_dict_to_json(data: dict, filename: str = "nba_team_per_data.json"):
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
 
 def create_database(teams_data: dict):
     '''
     retrieve the full dictionary with team alias, 
     name,roster (use .keys and join the list to make a string), 
-    win pct for seasons , avg per for seasons, highest per and player w the highest per
+    avg per, highest per and player w the highest per
 
 
 
-    '''           
+    '''        
+    pass    
 def main():
-    get_players_for_teams()
+    full_data = dict_for_database()
+    save_dict_to_json(full_data)
+
 
 if __name__ == '__main__':
     main()
