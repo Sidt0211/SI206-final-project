@@ -4,17 +4,13 @@ import requests
 import sqlite3 
 import json 
 import time
-'''
-Outline:
-1. Grab data of all active teams
-2. Create a function to calculate PER
-3. Loop through the list of each team and each players to assign a PER 
-4. Create a table using SQL (id, name, alias, active players list, win rate, highest PER)
-5. Find the highest 
-'''
-API_Key = "iUgGkgFtewzhUNggd2vczYVa7hawxWVdXb2QLpz4"
 
-years = [2024,2023,2022]
+API_Key1 = "niICbC63cETOJJlTriWtlrrHendyrbZXUEu8Ax1i"
+
+API_Key2 = "udrGJy8IqXMGz5Hl5WAkxTAYzbNK82GKBykSRrpO"
+
+
+years = 2024
 
 nba_aliases = [
     "ATL",  # Atlanta Hawks
@@ -22,7 +18,11 @@ nba_aliases = [
     "BKN",  # Brooklyn Nets
     "CHA",  # Charlotte Hornets
     "CHI",  # Chicago Bulls
-    "CLE",  # Cleveland Cavaliers
+    
+]
+
+'''
+the rest = ["CLE",  # Cleveland Cavaliers
     "DAL",  # Dallas Mavericks
     "DEN",  # Denver Nuggets
     "DET",  # Detroit Pistons
@@ -46,21 +46,25 @@ nba_aliases = [
     "SAS",  # San Antonio Spurs
     "TOR",  # Toronto Raptors
     "UTA",  # Utah Jazz
-    "WAS"   # Washington Wizards
-]
+    "WAS"   # Washington Wizards]
+'''
 
 
 def get_team_id() -> dict : 
 
-    team_url = f"https://api.sportradar.com/nba/trial/v8/en/league/teams.json?api_key={API_Key}"
+    team_url = f"https://api.sportradar.com/nba/trial/v8/en/league/teams.json?api_key={API_Key1}"
     headers = {"accept": "application/json"}
     response = requests.get(team_url, headers=headers)
     data = json.loads(response.text)
     team_id_map = {team["alias"]: team["id"] for team in data["teams"] if team.get("alias") in nba_aliases}
     
-   
+    current_directory = os.getcwd()
+    file_path = os.path.join(current_directory, "teams_info.json")
+    with open(file_path, "w",encoding="utf-8-sig") as teams_file:
+        json.dump(data, teams_file, indent=4)
 
     return team_id_map
+
 
 def get_players_for_teams() -> dict:
     """
@@ -72,7 +76,7 @@ def get_players_for_teams() -> dict:
 
     for alias, team_id in teams.items():
         # Build the team profile URL for active players; note the endpoint may vary.
-        profile_url = f"https://api.sportradar.com/nba/trial/v8/en/teams/{team_id}/profile.json?api_key={API_Key}"
+        profile_url = f"https://api.sportradar.com/nba/trial/v8/en/teams/{team_id}/profile.json?api_key={API_Key1}"
         headers = {"accept": "application/json"}
         response = requests.get(profile_url, headers=headers)
         
@@ -88,18 +92,29 @@ def get_players_for_teams() -> dict:
 
         teams_with_roster[alias] = {"id": team_id, "roster": roster}
         
-        time.sleep(7)
+        time.sleep(2)
 
     return teams_with_roster
 
-def collecting_perfomance(team_info: dict, year: int) -> dict:
-    highest_per = float("-inf")
-    highest_name = ""
-    all_per = []
-
+def collecting_performance(team_info: dict, year: int) -> dict:
+    """
+    Collects performance data for players on a team and returns a dictionary
+    with the 5 players who have the highest efficiency (PER).
+    
+    Args:
+        team_info: Dictionary containing team id and roster information
+        year: Year to collect data for
+        
+    Returns:
+        Dictionary with top 5 players sorted by PER
+    """
+    # Dictionary to store player name and their PER
+    player_per_dict = {}
+    
     roster = team_info.get("roster", {})
+    # Loop through each player in the roster
     for player_name, player_id in roster.items():
-        player_url = f"https://api.sportradar.com/nba/trial/v8/en/players/{player_id}/profile.json?api_key={API_Key}"
+        player_url = f"https://api.sportradar.com/nba/trial/v8/en/players/{player_id}/profile.json?api_key={API_Key2}"
         headers = {"accept": "application/json"}
         response = requests.get(player_url, headers=headers)
         
@@ -110,49 +125,59 @@ def collecting_perfomance(team_info: dict, year: int) -> dict:
     
         if response.status_code == 200:
             data = response.json()
+            # Find data for the specified year and regular season
             for season in data.get("seasons", []):
                 if season.get("year") == year and season.get("type") == "REG":
-                    team_data = season["teams"][0]
-                    efficiency = team_data.get("average", {}).get("efficiency")
-                    if efficiency is not None:
-                        all_per.append(efficiency)
-                        if efficiency > highest_per:
-                            highest_per = efficiency
-                            highest_name = player_name
+                    # Get the team data - assume first team in the list
+                    if season.get("teams") and len(season["teams"]) > 0:
+                        team_data = season["teams"][0]
+                        efficiency = team_data.get("average", {}).get("efficiency")
+                        if efficiency is not None:
+                            # Store player name and their efficiency
+                            player_per_dict[player_name] = efficiency
+                            break
         else:
             print(f"Failed to get data for {player_name}, status: {response.status_code}")
         
-        time.sleep(7)  
-
-    team_avg_per = sum(all_per)/len(all_per) if all_per else None
-    return {
-        "Average PER": team_avg_per,
-        "Highest PER": highest_per if highest_per != float("-inf") else None,
-        "Name": highest_name,
-        "Year": year
-    }
+        time.sleep(2)  # Respect API rate limits
+    
+    # Sort the players by PER in descending order and get the top 5
+    top_players = {}
+    counter = 1
+    
+    # Sort the dictionary items by PER value (descending)
+    sorted_players = sorted(player_per_dict.items(), key=lambda x: x[1], reverse=True)
+    
+    # Take only the top 5 players (or fewer if there aren't 5 players with PER data)
+    for name, per in sorted_players[:5]:
+        top_players[f"Player_{counter}"] = {
+            "name": name,
+            "efficiency": per
+        }
+        counter += 1
+    
+    return top_players
 
 
 def dict_for_database():
-    complete_dict = {}
-    #call get players for teams --> a nested dictionary 
     teams_dict = get_players_for_teams()
-    #traverse the whole dictionary to add avg per, highest per, and name 
-    for year in years:
-        year_dict = {}
-        for alias,team in teams_dict.items():
-            per_stats = collecting_perfomance(team,year)
-            name_only = list(team["roster"].keys())
-            team_entry = {
-                "Alias": alias,
-                "ID": team["id"],
-                "Roster": name_only
-            }
-            team_entry.update(per_stats)
-            year_dict[alias] = team_entry
-        complete_dict[year] = year_dict       
-
-    #endpoint should be a dictionary with this structure: {"Alias": str, "ID": str, "Roster": list, "Average PER": int, "Highest PER": int, "Name":str}
+    complete_dict = {}
+    
+    for alias, team in teams_dict.items():
+        # Get top 5 players by PER
+        top_players = collecting_performance(team, years)  # years is the single integer 2024
+        
+        # Create team entry with the top players as a dedicated field
+        team_entry = {
+            "Alias": alias,
+            "ID": team["id"],
+            "Roster": list(team["roster"].keys()),
+            "TopPlayers": top_players  # Store top players in their own field
+        }
+        
+        complete_dict[alias] = team_entry
+        print(f"Processed {alias}")
+    
     return complete_dict
 
 def save_dict_to_json(data: dict, filename: str = "nba_team_per_data.json"):
@@ -165,14 +190,43 @@ def create_database(teams_data: dict):
     name,roster (use .keys and join the list to make a string), 
     avg per, highest per and player w the highest per
 
-
-
     '''        
-    pass    
+    conn = sqlite3.connect("nba_efficiency.db")
+    cursor = conn.cursor()
+    
+    # Drop any existing table
+    cursor.execute('''
+    DROP TABLE IF EXISTS top_players
+    ''')
+    
+    # Create a single table with team and player information, without rank
+    cursor.execute('''
+    CREATE TABLE top_players (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        team_alias TEXT NOT NULL,
+        player_name TEXT NOT NULL,
+        efficiency REAL NOT NULL
+    )
+    ''')
+    
+    # Insert data into the table
+    for alias, team_data in teams_data.items():
+        # Insert top players with team alias, without rank
+        if "TopPlayers" in team_data:
+            for player_key in team_data["TopPlayers"]:
+                player_data = team_data["TopPlayers"][player_key]
+                cursor.execute(
+                    "INSERT INTO top_players (team_alias, player_name, efficiency) VALUES (?, ?, ?)",
+                    (alias, player_data["name"], player_data["efficiency"])
+                )
+    
+    conn.commit()
+    conn.close()
+ 
 def main():
     full_data = dict_for_database()
     save_dict_to_json(full_data)
-
+    create_database(full_data)
 
 if __name__ == '__main__':
     main()
