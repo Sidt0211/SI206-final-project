@@ -47,18 +47,23 @@ nba_aliases = [
 
 
 def get_team_id(teams_to_process) -> dict : 
-
+    # code suggested by SportsRadar
     team_url = f"https://api.sportradar.com/nba/trial/v8/en/league/teams.json?api_key={API_Key2}"
     headers = {"accept": "application/json"}
     response = requests.get(team_url, headers=headers)
-    data = json.loads(response.text)
+
+    data = json.loads(response.text) # --> load into dict to better access
+
+    #create a dictionary to map the team alias to its for later use
     team_id_map = {team["alias"]: team["id"] for team in data["teams"] if team.get("alias") in teams_to_process}
     
+    # load the file into json, this code will be commented out after done using it
+    '''
     current_directory = os.getcwd()
     file_path = os.path.join(current_directory, "teams_info.json")
     with open(file_path, "w",encoding="utf-8-sig") as teams_file:
         json.dump(data, teams_file, indent=4)
-
+    '''
     return team_id_map
 
 
@@ -68,7 +73,7 @@ def get_players_for_teams(teams_to_process) -> dict:
     The roster is a dictionary mapping each player's full name to their id.
     """
     teams = get_team_id(teams_to_process)  # Mapping alias -> team id
-    teams_with_roster = {}
+    teams_with_roster = {} #empty dictionary to store data in the following format {alias: id, roster(nested dictionary)}
 
     for alias, team_id in teams.items():
         # Build the team profile URL for active players; note the endpoint may vary.
@@ -81,7 +86,7 @@ def get_players_for_teams(teams_to_process) -> dict:
             data = response.json()
             roster_list = data.get("players", [])
             # Build a dictionary of player full names mapped to their ids.
-            roster = {player["full_name"]: player["id"] for player in roster_list if "full_name" in player}
+            roster = {player["full_name"]: player["id"] for player in roster_list if "full_name" in player} #--> the nested dict
         else:
             roster = {}
             print(f"Error retrieving profile for team {alias} (id: {team_id}). Status code: {response.status_code}")
@@ -104,53 +109,56 @@ def collecting_performance(team_info: dict, year: int) -> dict:
     Returns:
         Dictionary with top 5 players sorted by PER
     """
-    # Dictionary to store player name and their PER
+    # dictionary to store player name and their PER
     player_per_dict = {}
     
     roster = team_info.get("roster", {})
-    # Loop through each player in the roster
+    # loop through each player in the roster
     for player_name, player_id in roster.items():
         player_url = f"https://api.sportradar.com/nba/trial/v8/en/players/{player_id}/profile.json?api_key={API_Key2}"
         headers = {"accept": "application/json"}
         response = requests.get(player_url, headers=headers)
         
+        # error prevention, if run into API limit error --> wait and try again to retrieve data
         if response.status_code == 429:
             print("Rate limit hit. Sleeping for 60 seconds...")
             time.sleep(60)
             continue
-    
+        
+        #code 200 = success --> proceed with the program
         if response.status_code == 200:
             data = response.json()
-            # Find data for the specified year and regular season
+            # find data for the specified year and regular season
             for season in data.get("seasons", []):
                 if season.get("year") == year and season.get("type") == "REG":
-                    # Get the team data - assume first team in the list
+                    # get the team data --> access the dictionary based on Sportsradar format of the dict
                     if season.get("teams") and len(season["teams"]) > 0:
                         team_data = season["teams"][0]
                         efficiency = team_data.get("average", {}).get("efficiency")
                         if efficiency is not None:
-                            # Store player name and their efficiency
+                            # store player name and their efficiency
                             player_per_dict[player_name] = efficiency
                             break
         else:
             print(f"Failed to get data for {player_name}, status: {response.status_code}")
         
-        time.sleep(2)  # Respect API rate limits
+        time.sleep(2)  #sleep to repsect the limit 
     
-    # Sort the players by PER in descending order and get the top 5
+    # sort the players by PER in descending order and get the top 5
     top_players = {}
     counter = 1
     
-    # Sort the dictionary items by PER value (descending)
-    sorted_players = sorted(player_per_dict.items(), key=lambda x: x[1], reverse=True)
+    # sort the dictionary items by PER value (desc)
+    sorted_players = sorted(player_per_dict.items(), key=lambda x: x[1], reverse=True) 
+    #--> x[1] is the per, reverse = true for desc order
     
-    # Take only the top 5 players (or fewer if there aren't 5 players with PER data)
+    # take only the top 5 players --> avoid hitting the rate limit
     for name, per in sorted_players[:5]:
         top_players[f"Player_{counter}"] = {
             "name": name,
             "efficiency": per
         }
-        counter += 1
+        counter += 1 #counter to make sure the len of key is five
     
     return top_players
 
@@ -160,15 +168,15 @@ def dict_for_database(teams_to_process):
     complete_dict = {}
     
     for alias, team in teams_dict.items():
-        # Get top 5 players by PER
-        top_players = collecting_performance(team, years)  # years is the single integer 2024
+        # get top 5 players by PER
+        top_players = collecting_performance(team, years)  # can only get one season to avoid rate limit
         
-        # Create team entry with the top players as a dedicated field
+        # create team entry with the top players as a dedicated field
         team_entry = {
             "Alias": alias,
             "ID": team["id"],
             "Roster": list(team["roster"].keys()),
-            "TopPlayers": top_players  # Store top players in their own field
+            "TopPlayers": top_players  # store top players in their own field
         }
         
         complete_dict[alias] = team_entry
@@ -178,13 +186,13 @@ def dict_for_database(teams_to_process):
 
 def save_dict_to_json(data: dict, filename: str = "nba_team_per_data.json"):
     if os.path.exists(filename):
-
+        #open up the existing file to write data into it
         with open(filename, "r", encoding="utf-8") as f:
             existing_data = json.load(f)
 
             existing_data.update(data)
             data_save = existing_data
-    else:
+    else: #create new data if the exists is False
         data_save = data
     
     with open(filename,'w',encoding = "utf-8") as f:
@@ -197,7 +205,7 @@ def create_database():
     conn = sqlite3.connect("nba_efficiency.db")
     cursor = conn.cursor()
     
-    # Create table if it doesn't exist
+    # create table if it doesn't exist
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS top_players (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -216,28 +224,28 @@ def insert_team_data(teams_data):
     conn = sqlite3.connect("nba_efficiency.db")
     cursor = conn.cursor()
     
-    # Get list of teams already in the database to avoid duplicates
-    cursor.execute("SELECT DISTINCT team_alias FROM top_players")
+    # get list of teams already in the database to avoid duplicates
+    cursor.execute("SELECT DISTINCT team_alias FROM top_players") #--> DISTINCT return all different alias to avoid duplicate
     existing_teams = [team[0] for team in cursor.fetchall()]
     
     teams_inserted = 0
     
-    # Insert data into the table
+    # insert data into the table
     for alias, team_data in teams_data.items():
-        # Skip if team already exists in database
+        # skip if team already exists in database
         if alias in existing_teams:
-            print(f"Team {alias} already exists in database. Skipping.")
+            print(f"Team {alias} already exists in database. Skipping.") #--> avoid double counting
             continue
             
         # Insert top players with team alias
         if "TopPlayers" in team_data:
-            for player_key in team_data["TopPlayers"]:
+            for player_key in team_data["TopPlayers"]: 
                 player_data = team_data["TopPlayers"][player_key]
                 cursor.execute(
                     "INSERT INTO top_players (team_alias, player_name, efficiency) VALUES (?, ?, ?)",
                     (alias, player_data["name"], player_data["efficiency"])
                 )
-            teams_inserted += 1
+            teams_inserted += 1 #count five teams
     
     conn.commit()
     conn.close()
@@ -249,7 +257,7 @@ def get_processed_teams():
     cursor = conn.cursor()
     
     cursor.execute("SELECT DISTINCT team_alias FROM top_players")
-    processed_teams = [team[0] for team in cursor.fetchall()]
+    processed_teams = [team[0] for team in cursor.fetchall()] #get a list of processed team (team already in table) to check 
     
     conn.close()
     return processed_teams
@@ -263,14 +271,14 @@ def get_next_batch(batch_size=5):
         if team not in processed_teams:
             remaining_teams.append(team) 
     
-    # Return the next batch, or empty list if all done
+    # return the next batch, or empty list if all done --> help to better track what has been added
     return remaining_teams[:batch_size]
 
 def main():
-    # Create the database structure if it doesn't exist
+    #create the database structure if it doesn't exist
     create_database()
     
-    # Get the next batch of teams to process
+    #get the next batch of teams to process
     teams_to_process = get_next_batch(5)
     
     if not teams_to_process:
