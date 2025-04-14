@@ -5,9 +5,9 @@ import sqlite3
 import json 
 import time
 
-API_Key1 = "niICbC63cETOJJlTriWtlrrHendyrbZXUEu8Ax1i"
+API_Key1 = "vSAAKizKQlfaqbsW7ZaPInM5dwhwap32DARv24jy"
 
-API_Key2 = "udrGJy8IqXMGz5Hl5WAkxTAYzbNK82GKBykSRrpO"
+API_Key2 = "yZ6bmvDuyiUyEJ2J6TycitB2z6AF8PwUX9KptsZv"
 
 
 years = 2024
