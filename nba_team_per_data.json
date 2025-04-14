@@ -25,7 +25,7 @@
         "TopPlayers": {
             "Player_1": {
                 "name": "Nikola Vu\u010devi\u0107",
-                "efficiency": 25.11
+                "efficiency": 24.89
             },
             "Player_2": {
                 "name": "Josh Giddey",
@@ -33,7 +33,7 @@
             },
             "Player_3": {
                 "name": "Coby White",
-                "efficiency": 18.82
+                "efficiency": 18.61
             },
             "Player_4": {
                 "name": "Tre Jones",
@@ -48,8 +48,47 @@
     "BOS": {
         "Alias": "BOS",
         "ID": "583eccfa-fb46-11e1-82cb-f4ce4684ea4c",
-        "Roster": [],
-        "TopPlayers": {}
+        "Roster": [
+            "Payton Pritchard",
+            "Miles Norris",
+            "Kristaps Porzi\u0146\u0123is",
+            "Jordan Walsh",
+            "Jrue Holiday",
+            "JD Davison",
+            "Neemias Queta",
+            "Drew Peterson",
+            "Jayson Tatum",
+            "Derrick White",
+            "Baylor Scheierman",
+            "Torrey Craig",
+            "Al Horford",
+            "Sam Hauser",
+            "Xavier Tillman Sr.",
+            "Luke Kornet",
+            "Jaylen Brown"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Jayson Tatum",
+                "efficiency": 27.86
+            },
+            "Player_2": {
+                "name": "Kristaps Porzi\u0146\u0123is",
+                "efficiency": 21.31
+            },
+            "Player_3": {
+                "name": "Jaylen Brown",
+                "efficiency": 20.73
+            },
+            "Player_4": {
+                "name": "Derrick White",
+                "efficiency": 18.55
+            },
+            "Player_5": {
+                "name": "Payton Pritchard",
+                "efficiency": 15.76
+            }
+        }
     },
     "ATL": {
         "Alias": "ATL",
@@ -92,8 +131,8 @@
                 "efficiency": 19.2
             },
             "Player_5": {
-                "name": "Clint Capela",
-                "efficiency": 15.31
+                "name": "Jacob Toppin",
+                "efficiency": 16.0
             }
         }
     },
@@ -178,11 +217,11 @@
             },
             "Player_3": {
                 "name": "Nic Claxton",
-                "efficiency": 16.48
+                "efficiency": 16.4
             },
             "Player_4": {
                 "name": "Drew Timme",
-                "efficiency": 13.88
+                "efficiency": 13.44
             },
             "Player_5": {
                 "name": "Day'Ron Sharpe",
