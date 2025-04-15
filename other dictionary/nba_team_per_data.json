@@ -1,0 +1,1381 @@
+{
+    "CHI": {
+        "Alias": "CHI",
+        "ID": "583ec5fd-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Lonzo Ball",
+            "Tre Jones",
+            "Dalen Terry",
+            "Josh Giddey",
+            "Patrick Williams",
+            "Jalen Smith",
+            "Emanuel Miller",
+            "Nikola Vu\u010devi\u0107",
+            "Jevon Carter",
+            "Kevin Huerter",
+            "Julian Phillips",
+            "Coby White",
+            "Talen Horton-Tucker",
+            "Zach Collins",
+            "Jahmir Young",
+            "E.J. Liddell",
+            "Ayo Dosunmu",
+            "Matas Buzelis"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Nikola Vu\u010devi\u0107",
+                "efficiency": 24.89
+            },
+            "Player_2": {
+                "name": "Josh Giddey",
+                "efficiency": 22.03
+            },
+            "Player_3": {
+                "name": "Coby White",
+                "efficiency": 18.61
+            },
+            "Player_4": {
+                "name": "Tre Jones",
+                "efficiency": 16.5
+            },
+            "Player_5": {
+                "name": "Ayo Dosunmu",
+                "efficiency": 14.83
+            }
+        }
+    },
+    "BOS": {
+        "Alias": "BOS",
+        "ID": "583eccfa-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Payton Pritchard",
+            "Miles Norris",
+            "Kristaps Porzi\u0146\u0123is",
+            "Jordan Walsh",
+            "Jrue Holiday",
+            "JD Davison",
+            "Neemias Queta",
+            "Drew Peterson",
+            "Jayson Tatum",
+            "Derrick White",
+            "Baylor Scheierman",
+            "Torrey Craig",
+            "Al Horford",
+            "Sam Hauser",
+            "Xavier Tillman Sr.",
+            "Luke Kornet",
+            "Jaylen Brown"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Jayson Tatum",
+                "efficiency": 27.86
+            },
+            "Player_2": {
+                "name": "Kristaps Porzi\u0146\u0123is",
+                "efficiency": 21.31
+            },
+            "Player_3": {
+                "name": "Jaylen Brown",
+                "efficiency": 20.73
+            },
+            "Player_4": {
+                "name": "Derrick White",
+                "efficiency": 18.55
+            },
+            "Player_5": {
+                "name": "Payton Pritchard",
+                "efficiency": 15.76
+            }
+        }
+    },
+    "ATL": {
+        "Alias": "ATL",
+        "ID": "583ecb8f-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Keaton Wallace",
+            "Mouhamed Gueye",
+            "Dyson Daniels",
+            "Zaccharie Risacher",
+            "Dominick Barlow",
+            "Onyeka Okongwu",
+            "V\u00edt Krej\u010d\u00ed",
+            "Garrison Mathews",
+            "Kobe Bufkin",
+            "Jacob Toppin",
+            "Terance Mann",
+            "Larry Nance Jr.",
+            "Daeqwon Plowden",
+            "Caris LeVert",
+            "Clint Capela",
+            "Trae Young",
+            "Jalen Johnson",
+            "Georges Niang"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Jalen Johnson",
+                "efficiency": 25.08
+            },
+            "Player_2": {
+                "name": "Trae Young",
+                "efficiency": 24.01
+            },
+            "Player_3": {
+                "name": "Onyeka Okongwu",
+                "efficiency": 20.47
+            },
+            "Player_4": {
+                "name": "Dyson Daniels",
+                "efficiency": 19.2
+            },
+            "Player_5": {
+                "name": "Jacob Toppin",
+                "efficiency": 16.0
+            }
+        }
+    },
+    "CHA": {
+        "Alias": "CHA",
+        "ID": "583ec97e-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Seth Curry",
+            "Josh Okogie",
+            "Damion Baugh",
+            "DaQuan Jeffries",
+            "Jaylen Sims",
+            "Tidjane Sala\u00fcn",
+            "Grant Williams",
+            "Tre Mann",
+            "Brandon Miller",
+            "Moussa Diabat\u00e9",
+            "KJ Simpson",
+            "Taj Gibson",
+            "Mark Williams",
+            "Jusuf Nurki\u0107",
+            "Miles Bridges",
+            "Nick Smith Jr.",
+            "Josh Green",
+            "LaMelo Ball",
+            "Wendell Moore Jr."
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "LaMelo Ball",
+                "efficiency": 21.89
+            },
+            "Player_2": {
+                "name": "Miles Bridges",
+                "efficiency": 20.77
+            },
+            "Player_3": {
+                "name": "Brandon Miller",
+                "efficiency": 17.26
+            },
+            "Player_4": {
+                "name": "Jusuf Nurki\u0107",
+                "efficiency": 14.52
+            },
+            "Player_5": {
+                "name": "Grant Williams",
+                "efficiency": 13.31
+            }
+        }
+    },
+    "BKN": {
+        "Alias": "BKN",
+        "ID": "583ec9d6-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Dariq Whitehead",
+            "Drew Timme",
+            "Day'Ron Sharpe",
+            "Ziaire Williams",
+            "Nic Claxton",
+            "Cameron Johnson",
+            "Keon Johnson",
+            "De'Anthony Melton",
+            "Tyson Etienne",
+            "Tosan Evbuomwan",
+            "Jalen Wilson",
+            "Maxwell Lewis",
+            "Trendon Watford",
+            "Reece Beekman",
+            "Cam Thomas",
+            "D'Angelo Russell",
+            "Noah Clowney",
+            "Tyrese Martin"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Cameron Johnson",
+                "efficiency": 18.84
+            },
+            "Player_2": {
+                "name": "Cam Thomas",
+                "efficiency": 18.32
+            },
+            "Player_3": {
+                "name": "Nic Claxton",
+                "efficiency": 16.4
+            },
+            "Player_4": {
+                "name": "Drew Timme",
+                "efficiency": 13.44
+            },
+            "Player_5": {
+                "name": "Day'Ron Sharpe",
+                "efficiency": 13.36
+            }
+        }
+    },
+    "CLE": {
+        "Alias": "CLE",
+        "ID": "583ec773-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Ty Jerome",
+            "Emoni Bates",
+            "Javonte Green",
+            "Tristan Thompson",
+            "Nae'Qwan Tomlin",
+            "Sam Merrill",
+            "Craig Porter Jr.",
+            "Jaylon Tyson",
+            "Jarrett Allen",
+            "De'Andre Hunter",
+            "Donovan Mitchell",
+            "Darius Garland",
+            "Dean Wade",
+            "Luke Travers",
+            "Isaac Okoro",
+            "Evan Mobley",
+            "Chuma Okeke",
+            "Max Strus"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Evan Mobley",
+                "efficiency": 24.58
+            },
+            "Player_2": {
+                "name": "Jarrett Allen",
+                "efficiency": 22.51
+            },
+            "Player_3": {
+                "name": "Donovan Mitchell",
+                "efficiency": 21.7
+            },
+            "Player_4": {
+                "name": "Darius Garland",
+                "efficiency": 20.35
+            },
+            "Player_5": {
+                "name": "De'Andre Hunter",
+                "efficiency": 14.26
+            }
+        }
+    },
+    "DAL": {
+        "Alias": "DAL",
+        "ID": "583ecf50-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Dante Exum",
+            "Kai Jones",
+            "Dereck Lively II",
+            "Klay Thompson",
+            "Daniel Gafford",
+            "Caleb Martin",
+            "Olivier-Maxence Prosper",
+            "P.J. Washington Jr.",
+            "Spencer Dinwiddie",
+            "Naji Marshall",
+            "Dwight Powell",
+            "Jaden Hardy",
+            "Kessler Edwards",
+            "Brandon Williams",
+            "Kyrie Irving",
+            "Max Christie",
+            "Anthony Davis"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Anthony Davis",
+                "efficiency": 24.33
+            },
+            "Player_2": {
+                "name": "Kyrie Irving",
+                "efficiency": 23.34
+            },
+            "Player_3": {
+                "name": "Kai Jones",
+                "efficiency": 18.67
+            },
+            "Player_4": {
+                "name": "Daniel Gafford",
+                "efficiency": 18.37
+            },
+            "Player_5": {
+                "name": "P.J. Washington Jr.",
+                "efficiency": 17.46
+            }
+        }
+    },
+    "DEN": {
+        "Alias": "DEN",
+        "ID": "583ed102-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "DeAndre Jordan",
+            "Dario \u0160ari\u0107",
+            "Aaron Gordon",
+            "Trey Alexander",
+            "Hunter Tyson",
+            "Julian Strawther",
+            "Michael Porter Jr.",
+            "Jalen Pickett",
+            "Zeke Nnaji",
+            "Jamal Murray",
+            "Russell Westbrook",
+            "Vlatko \u010can\u010dar",
+            "PJ Hall",
+            "Peyton Watson",
+            "Christian Braun",
+            "Spencer Jones",
+            "DaRon Holmes II",
+            "Nikola Joki\u0107"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Nikola Joki\u0107",
+                "efficiency": 42.19
+            },
+            "Player_2": {
+                "name": "Jamal Murray",
+                "efficiency": 21.91
+            },
+            "Player_3": {
+                "name": "Michael Porter Jr.",
+                "efficiency": 19.77
+            },
+            "Player_4": {
+                "name": "Christian Braun",
+                "efficiency": 18.89
+            },
+            "Player_5": {
+                "name": "Aaron Gordon",
+                "efficiency": 16.78
+            }
+        }
+    },
+    "DET": {
+        "Alias": "DET",
+        "ID": "583ec928-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jalen Duren",
+            "Ausar Thompson",
+            "Ron Harper Jr.",
+            "Tim Hardaway Jr.",
+            "Marcus Sasser",
+            "Tolu Smith III",
+            "Cade Cunningham",
+            "Daniss Jenkins",
+            "Lindy Waters III",
+            "Tobias Harris",
+            "Isaiah Stewart",
+            "Ron Holland II",
+            "Dennis Schr\u00f6der",
+            "Bobi Klintman",
+            "Paul Reed",
+            "Malik Beasley",
+            "Jaden Ivey",
+            "Simone Fontecchio"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Cade Cunningham",
+                "efficiency": 26.83
+            },
+            "Player_2": {
+                "name": "Jalen Duren",
+                "efficiency": 21.71
+            },
+            "Player_3": {
+                "name": "Dennis Schr\u00f6der",
+                "efficiency": 18.61
+            },
+            "Player_4": {
+                "name": "Tobias Harris",
+                "efficiency": 16.41
+            },
+            "Player_5": {
+                "name": "Tolu Smith III",
+                "efficiency": 16.0
+            }
+        }
+    },
+    "GSW": {
+        "Alias": "GSW",
+        "ID": "583ec825-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jimmy Butler III",
+            "Taran Armstrong",
+            "Pat Spencer",
+            "Kevin Knox II",
+            "Quinten Post",
+            "Brandin Podziemski",
+            "Draymond Green",
+            "Jackson Rowe",
+            "Buddy Hield",
+            "Trayce Jackson-Davis",
+            "Stephen Curry",
+            "Gary Payton II",
+            "Moses Moody",
+            "Jonathan Kuminga",
+            "Braxton Key",
+            "Kevon Looney",
+            "Gui Santos"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Stephen Curry",
+                "efficiency": 23.5
+            },
+            "Player_2": {
+                "name": "Jimmy Butler III",
+                "efficiency": 23.0
+            },
+            "Player_3": {
+                "name": "Draymond Green",
+                "efficiency": 15.68
+            },
+            "Player_4": {
+                "name": "Brandin Podziemski",
+                "efficiency": 14.48
+            },
+            "Player_5": {
+                "name": "Jonathan Kuminga",
+                "efficiency": 13.62
+            }
+        }
+    },
+    "LAC": {
+        "Alias": "LAC",
+        "ID": "583ecdfb-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Patrick Baldwin Jr.",
+            "Drew Eubanks",
+            "Ivica Zubac",
+            "Ben Simmons",
+            "Seth Lundy",
+            "Derrick Jones Jr.",
+            "Kris Dunn",
+            "Kobe Brown",
+            "Patty Mills",
+            "Jordan Miller",
+            "James Harden",
+            "Nicolas Batum",
+            "Bogdan Bogdanovi\u0107",
+            "Amir Coffey",
+            "Kawhi Leonard",
+            "Trentyn Flowers",
+            "Cam Christie",
+            "Norman Powell"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Ivica Zubac",
+                "efficiency": 26.9
+            },
+            "Player_2": {
+                "name": "James Harden",
+                "efficiency": 24.56
+            },
+            "Player_3": {
+                "name": "Kawhi Leonard",
+                "efficiency": 21.59
+            },
+            "Player_4": {
+                "name": "Norman Powell",
+                "efficiency": 17.58
+            },
+            "Player_5": {
+                "name": "Ben Simmons",
+                "efficiency": 14.36
+            }
+        }
+    },
+    "MEM": {
+        "Alias": "MEM",
+        "ID": "583eca88-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Lamar Stevens",
+            "Zyon Pullin",
+            "Vince Williams Jr.",
+            "Jay Huff",
+            "Santi Aldama",
+            "GG Jackson II",
+            "Jaren Jackson Jr.",
+            "Desmond Bane",
+            "Zach Edey",
+            "John Konchar",
+            "Ja Morant",
+            "Cam Spencer",
+            "Luke Kennard",
+            "Brandon Clarke",
+            "Scotty Pippen Jr.",
+            "Marvin Bagley III",
+            "Jaylen Wells",
+            "Yuki Kawamura"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Desmond Bane",
+                "efficiency": 21.84
+            },
+            "Player_2": {
+                "name": "Ja Morant",
+                "efficiency": 21.5
+            },
+            "Player_3": {
+                "name": "Jaren Jackson Jr.",
+                "efficiency": 20.95
+            },
+            "Player_4": {
+                "name": "Santi Aldama",
+                "efficiency": 16.32
+            },
+            "Player_5": {
+                "name": "Zach Edey",
+                "efficiency": 15.71
+            }
+        }
+    },
+    "LAL": {
+        "Alias": "LAL",
+        "ID": "583ecae2-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "LeBron James",
+            "Jarred Vanderbilt",
+            "Jordan Goodwin",
+            "Gabe Vincent",
+            "Markieff Morris",
+            "Alex Len",
+            "Maxi Kleber",
+            "Dorian Finney-Smith",
+            "Shake Milton",
+            "Jaxson Hayes",
+            "Rui Hachimura",
+            "Dalton Knecht",
+            "Austin Reaves",
+            "Luka Don\u010di\u0107",
+            "Trey Jemison III",
+            "Bronny James",
+            "Christian Koloko"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Luka Don\u010di\u0107",
+                "efficiency": 29.04
+            },
+            "Player_2": {
+                "name": "LeBron James",
+                "efficiency": 28.41
+            },
+            "Player_3": {
+                "name": "Austin Reaves",
+                "efficiency": 21.18
+            },
+            "Player_4": {
+                "name": "Rui Hachimura",
+                "efficiency": 14.68
+            },
+            "Player_5": {
+                "name": "Dorian Finney-Smith",
+                "efficiency": 12.35
+            }
+        }
+    },
+    "IND": {
+        "Alias": "IND",
+        "ID": "583ec7cd-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Andrew Nembhard",
+            "Thomas Bryant",
+            "Isaiah Jackson",
+            "James Johnson",
+            "Johnny Furphy",
+            "Tyrese Haliburton",
+            "Myles Turner",
+            "Ben Sheppard",
+            "Pascal Siakam",
+            "Bennedict Mathurin",
+            "Tony Bradley",
+            "Jarace Walker",
+            "Quenton Jackson",
+            "Aaron Nesmith",
+            "Enrique Freeman",
+            "RayJ Dennis",
+            "T.J. McConnell",
+            "Obi Toppin"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Tyrese Haliburton",
+                "efficiency": 24.12
+            },
+            "Player_2": {
+                "name": "Pascal Siakam",
+                "efficiency": 22.22
+            },
+            "Player_3": {
+                "name": "Myles Turner",
+                "efficiency": 18.08
+            },
+            "Player_4": {
+                "name": "Bennedict Mathurin",
+                "efficiency": 15.18
+            },
+            "Player_5": {
+                "name": "Aaron Nesmith",
+                "efficiency": 13.2
+            }
+        }
+    },
+    "HOU": {
+        "Alias": "HOU",
+        "ID": "583ecb3a-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jock Landale",
+            "Jae'Sean Tate",
+            "Jabari Smith Jr.",
+            "David Roddy",
+            "Jack McVeigh",
+            "Fred VanVleet",
+            "Alperen \u015eeng\u00fcn",
+            "Dillon Brooks",
+            "Aaron Holiday",
+            "Jalen Green",
+            "Steven Adams",
+            "N'Faly Dante",
+            "Cam Whitmore",
+            "Reed Sheppard",
+            "Nate Williams",
+            "Amen Thompson",
+            "Jeff Green",
+            "Tari Eason"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Alperen \u015eeng\u00fcn",
+                "efficiency": 24.37
+            },
+            "Player_2": {
+                "name": "Amen Thompson",
+                "efficiency": 21.16
+            },
+            "Player_3": {
+                "name": "Jalen Green",
+                "efficiency": 16.89
+            },
+            "Player_4": {
+                "name": "Tari Eason",
+                "efficiency": 15.81
+            },
+            "Player_5": {
+                "name": "Fred VanVleet",
+                "efficiency": 15.53
+            }
+        }
+    },
+    "MIL": {
+        "Alias": "MIL",
+        "ID": "583ecefd-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jamaree Bouyea",
+            "Pat Connaughton",
+            "Tyler Smith",
+            "Taurean Prince",
+            "Kyle Kuzma",
+            "Damian Lillard",
+            "Jericho Sims",
+            "AJ Green",
+            "Gary Trent Jr.",
+            "Bobby Portis",
+            "Giannis Antetokounmpo",
+            "Pete Nance",
+            "Andre Jackson Jr.",
+            "Brook Lopez",
+            "Stanley Umude",
+            "Kevin Porter Jr.",
+            "Chris Livingston",
+            "Ryan Rollins"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Giannis Antetokounmpo",
+                "efficiency": 35.82
+            },
+            "Player_2": {
+                "name": "Damian Lillard",
+                "efficiency": 25.31
+            },
+            "Player_3": {
+                "name": "Bobby Portis",
+                "efficiency": 17.73
+            },
+            "Player_4": {
+                "name": "Brook Lopez",
+                "efficiency": 16.19
+            },
+            "Player_5": {
+                "name": "Kyle Kuzma",
+                "efficiency": 12.53
+            }
+        }
+    },
+    "MIA": {
+        "Alias": "MIA",
+        "ID": "583ecea6-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Bam Adebayo",
+            "Duncan Robinson",
+            "Kyle Anderson",
+            "Davion Mitchell",
+            "Jaime Jaquez Jr.",
+            "Isaiah Stevens",
+            "Keshad Johnson",
+            "Pelle Larsson",
+            "Alec Burks",
+            "Andrew Wiggins",
+            "Kevin Love",
+            "Josh Christopher",
+            "Tyler Herro",
+            "Haywood Highsmith",
+            "Dru Smith",
+            "Terry Rozier",
+            "Nikola Jovi\u0107",
+            "Kel'el Ware"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Bam Adebayo",
+                "efficiency": 23.54
+            },
+            "Player_2": {
+                "name": "Tyler Herro",
+                "efficiency": 23.17
+            },
+            "Player_3": {
+                "name": "Andrew Wiggins",
+                "efficiency": 16.37
+            },
+            "Player_4": {
+                "name": "Kel'el Ware",
+                "efficiency": 14.89
+            },
+            "Player_5": {
+                "name": "Davion Mitchell",
+                "efficiency": 14.03
+            }
+        }
+    },
+    "NYK": {
+        "Alias": "NYK",
+        "ID": "583ec70e-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Kevin McCullar Jr.",
+            "Delon Wright",
+            "Miles McBride",
+            "Precious Achiuwa",
+            "Landry Shamet",
+            "Tyler Kolek",
+            "Ariel Hukporti",
+            "Mikal Bridges",
+            "Anton Watson",
+            "Jalen Brunson",
+            "OG Anunoby",
+            "Mitchell Robinson",
+            "Karl-Anthony Towns",
+            "Josh Hart",
+            "P.J. Tucker",
+            "MarJon Beauchamp",
+            "Cameron Payne",
+            "Pac\u00f4me Dadiet"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Karl-Anthony Towns",
+                "efficiency": 30.33
+            },
+            "Player_2": {
+                "name": "Jalen Brunson",
+                "efficiency": 24.02
+            },
+            "Player_3": {
+                "name": "Josh Hart",
+                "efficiency": 23.6
+            },
+            "Player_4": {
+                "name": "OG Anunoby",
+                "efficiency": 18.19
+            },
+            "Player_5": {
+                "name": "Mikal Bridges",
+                "efficiency": 16.85
+            }
+        }
+    },
+    "NOP": {
+        "Alias": "NOP",
+        "ID": "583ecc9a-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Kylor Kelley",
+            "Lester Quinones",
+            "Jordan Hawkins",
+            "Brandon Boston Jr.",
+            "Trey Murphy III",
+            "Zion Williamson",
+            "Elfrid Payton",
+            "Herbert Jones",
+            "Jeremiah Robinson-Earl",
+            "Dejounte Murray",
+            "Yves Missi",
+            "Jose Alvarado",
+            "Kelly Olynyk",
+            "Jamal Cain",
+            "CJ McCollum",
+            "Antonio Reeves",
+            "Karlo Matkovic",
+            "Keion Brooks Jr.",
+            "Bruce Brown"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Zion Williamson",
+                "efficiency": 26.1
+            },
+            "Player_2": {
+                "name": "Trey Murphy III",
+                "efficiency": 20.53
+            },
+            "Player_3": {
+                "name": "Dejounte Murray",
+                "efficiency": 19.9
+            },
+            "Player_4": {
+                "name": "CJ McCollum",
+                "efficiency": 17.52
+            },
+            "Player_5": {
+                "name": "Yves Missi",
+                "efficiency": 15.32
+            }
+        }
+    },
+    "MIN": {
+        "Alias": "MIN",
+        "ID": "583eca2f-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jesse Edwards",
+            "Julius Randle",
+            "Terrence Shannon Jr.",
+            "Rudy Gobert",
+            "Mike Conley",
+            "Joe Ingles",
+            "Bones Hyland",
+            "Leonard Miller",
+            "Naz Reid",
+            "Tristen Newton",
+            "Luka Garza",
+            "Rob Dillingham",
+            "Donte DiVincenzo",
+            "Jaylen Clark",
+            "Jaden McDaniels",
+            "Josh Minott",
+            "Anthony Edwards",
+            "Nickeil Alexander-Walker"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Anthony Edwards",
+                "efficiency": 24.14
+            },
+            "Player_2": {
+                "name": "Rudy Gobert",
+                "efficiency": 22.1
+            },
+            "Player_3": {
+                "name": "Julius Randle",
+                "efficiency": 20.52
+            },
+            "Player_4": {
+                "name": "Naz Reid",
+                "efficiency": 16.15
+            },
+            "Player_5": {
+                "name": "Jaden McDaniels",
+                "efficiency": 15.39
+            }
+        }
+    },
+    "PHI": {
+        "Alias": "PHI",
+        "ID": "583ec87d-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jared Butler",
+            "Jared McCain",
+            "Jeff Dowtin Jr.",
+            "Guerschon Yabusele",
+            "Ricky Council IV",
+            "Justin Edwards",
+            "Andre Drummond",
+            "Tyrese Maxey",
+            "Kelly Oubre Jr.",
+            "Kyle Lowry",
+            "Isaiah Mobley",
+            "Alex Reese",
+            "Joel Embiid",
+            "Marcus Bagley",
+            "Jalen Hood-Schifino",
+            "Adem Bona",
+            "Lonnie Walker IV",
+            "Paul George",
+            "Quentin Grimes",
+            "Eric Gordon"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Joel Embiid",
+                "efficiency": 24.58
+            },
+            "Player_2": {
+                "name": "Tyrese Maxey",
+                "efficiency": 23.06
+            },
+            "Player_3": {
+                "name": "Quentin Grimes",
+                "efficiency": 20.79
+            },
+            "Player_4": {
+                "name": "Paul George",
+                "efficiency": 17.27
+            },
+            "Player_5": {
+                "name": "Kelly Oubre Jr.",
+                "efficiency": 16.42
+            }
+        }
+    },
+    "ORL": {
+        "Alias": "ORL",
+        "ID": "583ed157-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Anthony Black",
+            "Goga Bitadze",
+            "Paolo Banchero",
+            "Franz Wagner",
+            "Cory Joseph",
+            "Gary Harris",
+            "Jalen Suggs",
+            "Wendell Carter Jr.",
+            "Jonathan Isaac",
+            "Trevelin Queen",
+            "Caleb Houstan",
+            "Tristan da Silva",
+            "Jett Howard",
+            "Cole Anthony",
+            "Kentavious Caldwell-Pope",
+            "Ethan Thompson",
+            "Mac McClung",
+            "Moritz Wagner"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Paolo Banchero",
+                "efficiency": 23.46
+            },
+            "Player_2": {
+                "name": "Franz Wagner",
+                "efficiency": 22.82
+            },
+            "Player_3": {
+                "name": "Jalen Suggs",
+                "efficiency": 14.91
+            },
+            "Player_4": {
+                "name": "Goga Bitadze",
+                "efficiency": 14.24
+            },
+            "Player_5": {
+                "name": "Moritz Wagner",
+                "efficiency": 14.1
+            }
+        }
+    },
+    "PHX": {
+        "Alias": "PHX",
+        "ID": "583ecfa8-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Damion Lee",
+            "TyTy Washington Jr.",
+            "Devin Booker",
+            "Royce O'Neale",
+            "Jalen Bridges",
+            "Mont\u00e9 Morris",
+            "Kevin Durant",
+            "Collin Gillespie",
+            "Bol Bol",
+            "Oso Ighodaro",
+            "Vasilije Mici\u0107",
+            "Cody Martin",
+            "Ryan Dunn",
+            "Mason Plumlee",
+            "Nick Richards",
+            "Tyus Jones",
+            "Bradley Beal",
+            "Grayson Allen"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Kevin Durant",
+                "efficiency": 26.31
+            },
+            "Player_2": {
+                "name": "Devin Booker",
+                "efficiency": 24.04
+            },
+            "Player_3": {
+                "name": "Bradley Beal",
+                "efficiency": 16.7
+            },
+            "Player_4": {
+                "name": "Nick Richards",
+                "efficiency": 15.39
+            },
+            "Player_5": {
+                "name": "Tyus Jones",
+                "efficiency": 13.05
+            }
+        }
+    },
+    "OKC": {
+        "Alias": "OKC",
+        "ID": "583ecfff-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Ajay Mitchell",
+            "Isaiah Joe",
+            "Isaiah Hartenstein",
+            "Dillon Jones",
+            "Luguentz Dort",
+            "Jaylin Williams",
+            "Jalen Williams",
+            "Adam Flagler",
+            "Alex Caruso",
+            "Kenrich Williams",
+            "Ousmane Dieng",
+            "Branden Carlson",
+            "Cason Wallace",
+            "Nikola Topi\u0107",
+            "Alex Ducas",
+            "Aaron Wiggins",
+            "Shai Gilgeous-Alexander",
+            "Chet Holmgren"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Shai Gilgeous-Alexander",
+                "efficiency": 33.03
+            },
+            "Player_2": {
+                "name": "Jalen Williams",
+                "efficiency": 22.52
+            },
+            "Player_3": {
+                "name": "Isaiah Hartenstein",
+                "efficiency": 21.77
+            },
+            "Player_4": {
+                "name": "Chet Holmgren",
+                "efficiency": 19.69
+            },
+            "Player_5": {
+                "name": "Aaron Wiggins",
+                "efficiency": 12.68
+            }
+        }
+    },
+    "POR": {
+        "Alias": "POR",
+        "ID": "583ed056-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Rayan Rupert",
+            "Toumani Camara",
+            "Deni Avdija",
+            "Bryce McGowens",
+            "Jerami Grant",
+            "Anfernee Simons",
+            "Dalano Banton",
+            "Sidy Cissoko",
+            "Deandre Ayton",
+            "Matisse Thybulle",
+            "Scoot Henderson",
+            "Kris Murray",
+            "Robert Williams III",
+            "Donovan Clingan",
+            "Justin Minaya",
+            "Duop Reath",
+            "Shaedon Sharpe",
+            "Jabari Walker"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Deandre Ayton",
+                "efficiency": 20.6
+            },
+            "Player_2": {
+                "name": "Deni Avdija",
+                "efficiency": 19.56
+            },
+            "Player_3": {
+                "name": "Anfernee Simons",
+                "efficiency": 16.16
+            },
+            "Player_4": {
+                "name": "Shaedon Sharpe",
+                "efficiency": 15.67
+            },
+            "Player_5": {
+                "name": "Toumani Camara",
+                "efficiency": 14.63
+            }
+        }
+    },
+    "UTA": {
+        "Alias": "UTA",
+        "ID": "583ece50-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Isaiah Collier",
+            "Jordan Clarkson",
+            "Micah Potter",
+            "John Collins",
+            "KJ Martin",
+            "Keyonte George",
+            "Elijah Harkless",
+            "Lauri Markkanen",
+            "Johnny Juzang",
+            "Kyle Filipowski",
+            "Walker Kessler",
+            "Collin Sexton",
+            "Oscar Tshiebwe",
+            "Svi Mykhailiuk",
+            "Jaden Springer",
+            "Brice Sensabaugh",
+            "Cody Williams",
+            "Taylor Hendricks"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Walker Kessler",
+                "efficiency": 22.74
+            },
+            "Player_2": {
+                "name": "John Collins",
+                "efficiency": 21.63
+            },
+            "Player_3": {
+                "name": "Lauri Markkanen",
+                "efficiency": 16.96
+            },
+            "Player_4": {
+                "name": "Collin Sexton",
+                "efficiency": 15.9
+            },
+            "Player_5": {
+                "name": "Keyonte George",
+                "efficiency": 15.15
+            }
+        }
+    },
+    "SAC": {
+        "Alias": "SAC",
+        "ID": "583ed0ac-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Devin Carter",
+            "Domantas Sabonis",
+            "Malik Monk",
+            "Markelle Fultz",
+            "Terence Davis",
+            "Trey Lyles",
+            "DeMar DeRozan",
+            "Doug McDermott",
+            "Keon Ellis",
+            "Mason Jones",
+            "Keegan Murray",
+            "Isaiah Crawford",
+            "Jonas Valan\u010di\u016bnas",
+            "Jake LaRavia",
+            "Zach LaVine",
+            "Jae Crowder",
+            "Isaac Jones"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Domantas Sabonis",
+                "efficiency": 30.96
+            },
+            "Player_2": {
+                "name": "Zach LaVine",
+                "efficiency": 22.43
+            },
+            "Player_3": {
+                "name": "DeMar DeRozan",
+                "efficiency": 20.68
+            },
+            "Player_4": {
+                "name": "Malik Monk",
+                "efficiency": 17.12
+            },
+            "Player_5": {
+                "name": "Keegan Murray",
+                "efficiency": 15.26
+            }
+        }
+    },
+    "TOR": {
+        "Alias": "TOR",
+        "ID": "583ecda6-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Jared Rhoden",
+            "Scottie Barnes",
+            "Ja'Kobe Walter",
+            "RJ Barrett",
+            "Gradey Dick",
+            "A.J. Lawson",
+            "Brandon Ingram",
+            "Ulrich Chomche",
+            "Colin Castleton",
+            "Ochai Agbaji",
+            "Jamison Battle",
+            "Jonathan Mogbo",
+            "Jamal Shead",
+            "Cole Swider",
+            "Immanuel Quickley",
+            "Jakob Poeltl",
+            "Garrett Temple",
+            "Chris Boucher"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Jakob Poeltl",
+                "efficiency": 22.67
+            },
+            "Player_2": {
+                "name": "Scottie Barnes",
+                "efficiency": 22.15
+            },
+            "Player_3": {
+                "name": "RJ Barrett",
+                "efficiency": 20.07
+            },
+            "Player_4": {
+                "name": "Immanuel Quickley",
+                "efficiency": 17.27
+            },
+            "Player_5": {
+                "name": "Ochai Agbaji",
+                "efficiency": 11.86
+            }
+        }
+    },
+    "SAS": {
+        "Alias": "SAS",
+        "ID": "583ecd4f-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Blake Wesley",
+            "Keldon Johnson",
+            "David Duke Jr.",
+            "Jeremy Sochan",
+            "Riley Minix",
+            "Bismack Biyombo",
+            "Chris Paul",
+            "Victor Wembanyama",
+            "Jordan McLaughlin",
+            "Sandro Mamukelashvili",
+            "Harrison Barnes",
+            "De'Aaron Fox",
+            "Harrison Ingram",
+            "Stephon Castle",
+            "Charles Bassey",
+            "Malaki Branham",
+            "Julian Champagnie",
+            "Devin Vassell"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Victor Wembanyama",
+                "efficiency": 30.2
+            },
+            "Player_2": {
+                "name": "De'Aaron Fox",
+                "efficiency": 23.71
+            },
+            "Player_3": {
+                "name": "Chris Paul",
+                "efficiency": 15.6
+            },
+            "Player_4": {
+                "name": "Devin Vassell",
+                "efficiency": 15.44
+            },
+            "Player_5": {
+                "name": "Jeremy Sochan",
+                "efficiency": 15.35
+            }
+        }
+    },
+    "WAS": {
+        "Alias": "WAS",
+        "ID": "583ec8d4-fb46-11e1-82cb-f4ce4684ea4c",
+        "Roster": [
+            "Kyshawn George",
+            "Jaylen Martin",
+            "Bilal Coulibaly",
+            "Carlton Carrington",
+            "Jordan Poole",
+            "Corey Kispert",
+            "Khris Middleton",
+            "JT Thor",
+            "Justin Champagnie",
+            "Tristan Vuk\u010devi\u0107",
+            "Anthony Gill",
+            "Marcus Smart",
+            "Colby Jones",
+            "Saddiq Bey",
+            "AJ Johnson",
+            "Richaun Holmes",
+            "Malcolm Brogdon",
+            "Alex Sarr"
+        ],
+        "TopPlayers": {
+            "Player_1": {
+                "name": "Jordan Poole",
+                "efficiency": 17.26
+            },
+            "Player_2": {
+                "name": "Alex Sarr",
+                "efficiency": 14.04
+            },
+            "Player_3": {
+                "name": "Bilal Coulibaly",
+                "efficiency": 13.66
+            },
+            "Player_4": {
+                "name": "Malcolm Brogdon",
+                "efficiency": 13.63
+            },
+            "Player_5": {
+                "name": "Richaun Holmes",
+                "efficiency": 12.94
+            }
+        }
+    }
+}
