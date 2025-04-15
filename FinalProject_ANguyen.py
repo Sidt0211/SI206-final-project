@@ -45,8 +45,7 @@ nba_aliases = [
     "WAS"   # Washington Wizards
     ]
 
-
-def get_team_id(teams_to_process) -> dict : 
+def get_team_id(teams_to_process:dict) -> dict : 
     # code suggested by SportsRadar
     team_url = f"https://api.sportradar.com/nba/trial/v8/en/league/teams.json?api_key={API_Key2}"
     headers = {"accept": "application/json"}
@@ -67,7 +66,7 @@ def get_team_id(teams_to_process) -> dict :
     return team_id_map
 
 
-def get_players_for_teams(teams_to_process) -> dict:
+def get_players_for_teams(teams_to_process:dict) -> dict:
     """
     Retrieve a dictionary mapping team alias to a dictionary with team id and active player roster.
     The roster is a dictionary mapping each player's full name to their id.
@@ -81,15 +80,16 @@ def get_players_for_teams(teams_to_process) -> dict:
         headers = {"accept": "application/json"}
         response = requests.get(profile_url, headers=headers)
         
-        # If the API call is successful, parse the roster.
+        # API call is successful --> parse the roster.
         if response.status_code == 200:
             data = response.json()
-            roster_list = data.get("players", [])
-            # Build a dictionary of player full names mapped to their ids.
+            roster_list = data.get("players", []) #--> prevent KeyError by returning an empty list
+            # build a dictionary of player full names mapped to their ids.
             roster = {player["full_name"]: player["id"] for player in roster_list if "full_name" in player} #--> the nested dict
         else:
             roster = {}
-            print(f"Error retrieving profile for team {alias} (id: {team_id}). Status code: {response.status_code}")
+            print(f"Error retrieving profile for team {alias} (id: {team_id}). Status code: {response.status_code}") 
+            #to check if we encounter 429 or 403
 
         teams_with_roster[alias] = {"id": team_id, "roster": roster}
         
@@ -98,17 +98,6 @@ def get_players_for_teams(teams_to_process) -> dict:
     return teams_with_roster
 
 def collecting_performance(team_info: dict, year: int) -> dict:
-    """
-    Collects performance data for players on a team and returns a dictionary
-    with the 5 players who have the highest efficiency (PER).
-    
-    Args:
-        team_info: Dictionary containing team id and roster information
-        year: Year to collect data for
-        
-    Returns:
-        Dictionary with top 5 players sorted by PER
-    """
     # dictionary to store player name and their PER
     player_per_dict = {}
     
@@ -163,14 +152,14 @@ def collecting_performance(team_info: dict, year: int) -> dict:
     return top_players
 
 
-def dict_for_database(teams_to_process):
+def dict_for_database(teams_to_process:dict):
     teams_dict = get_players_for_teams(teams_to_process)
     complete_dict = {}
     
     for alias, team in teams_dict.items():
         # get top 5 players by PER
         top_players = collecting_performance(team, years)  # can only get one season to avoid rate limit
-        
+            
         # create team entry with the top players as a dedicated field
         team_entry = {
             "Alias": alias,
@@ -198,9 +187,9 @@ def save_dict_to_json(data: dict, filename: str = "nba_team_per_data.json"):
     with open(filename,'w',encoding = "utf-8") as f:
         json.dump(data_save,f,indent = 4)
 
-def create_database():
+def create_database1():
     """
-    Create the database and table structure only if it doesn't exist yet.
+    create the database and table structure only if it doesn't exist yet.
     """
     conn = sqlite3.connect("nba_efficiency.db")
     cursor = conn.cursor()
@@ -218,15 +207,16 @@ def create_database():
     conn.commit()
     conn.close()
     print("Database and table created successfully.")
+        
 
-def insert_team_data(teams_data):
-    """Insert team data into the database"""
+def insert_team_data(teams_data:dict):
+    #insert team data into the database
     conn = sqlite3.connect("nba_efficiency.db")
     cursor = conn.cursor()
     
     # get list of teams already in the database to avoid duplicates
     cursor.execute("SELECT DISTINCT team_alias FROM top_players") #--> DISTINCT return all different alias to avoid duplicate
-    existing_teams = [team[0] for team in cursor.fetchall()]
+    existing_teams = [team[0] for team in cursor.fetchall()] 
     
     teams_inserted = 0
     
@@ -236,8 +226,8 @@ def insert_team_data(teams_data):
         if alias in existing_teams:
             print(f"Team {alias} already exists in database. Skipping.") #--> avoid double counting
             continue
-            
-        # Insert top players with team alias
+        
+        # insert top players with team alias
         if "TopPlayers" in team_data:
             for player_key in team_data["TopPlayers"]: 
                 player_data = team_data["TopPlayers"][player_key]
@@ -251,7 +241,70 @@ def insert_team_data(teams_data):
     conn.close()
     print(f"Inserted data for {teams_inserted} new teams.")
 
-def get_processed_teams():
+def create_database2(): #--> database for avg efficiency of each team
+    conn = sqlite3.connect("nba_efficiency.db")
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS avg_efficiency (
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   team_alias TEXT NOT NULL,
+                   avg_per REAL NOT NULL
+                   )
+    ''')
+
+    conn.commit()
+    conn.close()
+    
+def avg_efficiency(filename):
+    conn = sqlite3.connect(filename)
+    cursor = conn.cursor()
+    avg_dict = {}
+    for team in nba_aliases:
+        cursor.execute('''
+        SELECT team_alias, efficiency 
+                       FROM top_players 
+                       WHERE team_alias = ? 
+                       ''', (team,))
+        av_efficiency = [data[1] for data in cursor.fetchall()]
+        if len(av_efficiency) > 0:
+            avg = sum(av_efficiency) / len(av_efficiency)
+        else:
+            print("List is empty")
+            avg_dict[team] = None
+
+        avg_dict[team] = avg
+    cursor.close()    
+    return avg_dict
+
+def insert_avg_eff(avg_dict):
+
+    conn = sqlite3.connect("nba_efficiency.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT DISTINCT team_alias FROM avg_efficiency") #--> DISTINCT return all different alias to avoid duplicate
+    existing_teams = [team[0] for team in cursor.fetchall()] 
+    
+    teams_inserted = 0
+    
+    # insert data into the table
+    for alias, per in avg_dict.items():
+        # skip if team already exists in database
+        if alias in existing_teams:
+            print(f"Team {alias} already exists in database. Skipping.") #--> avoid double counting
+            continue
+        
+        # insert top players with team alias
+        cursor.execute(
+                "INSERT INTO avg_efficiency (team_alias, avg_per) VALUES (?, ?)",
+                    (alias, per)
+            )
+        teams_inserted += 1 #count five teams
+    
+    conn.commit()
+    conn.close()
+
+def get_processed_teams()-> list : 
     """Get list of teams already processed in the database"""
     conn = sqlite3.connect("nba_efficiency.db")
     cursor = conn.cursor()
@@ -262,7 +315,7 @@ def get_processed_teams():
     conn.close()
     return processed_teams
 
-def get_next_batch(batch_size=5):
+def get_next_batch(batch_size=5) -> list :
     """Get the next batch of teams to process"""
     processed_teams = get_processed_teams()
     
@@ -273,21 +326,23 @@ def get_next_batch(batch_size=5):
     
     # return the next batch, or empty list if all done --> help to better track what has been added
     return remaining_teams[:batch_size]
+    
 
 def main():
+    '''
     #create the database structure if it doesn't exist
-    create_database()
+    create_database1()
     
     #get the next batch of teams to process
     teams_to_process = get_next_batch(5)
     
-    if not teams_to_process:
+    if len(teams_to_process) == 0:
         print("All teams have been processed!")
         return
         
-    print(f"Processing teams: {', '.join(teams_to_process)}")
+    print(f"Processing teams: {teams_to_process}")
     
-    # Process the batch of teams
+    #process the batch of the next 5 teams
     full_data = dict_for_database(teams_to_process)
     
     save_dict_to_json(full_data)
@@ -303,6 +358,10 @@ def main():
     print(f"Teams remaining: {len(remaining)}")
     if remaining:
         print(f"Next batch will be: {', '.join(remaining[:5])}")
+  '''  
+    create_database2()
+    avg_dict = avg_efficiency("nba_efficiency.db")
+    insert_avg_eff(avg_dict)
 
 if __name__ == '__main__':
     main()
