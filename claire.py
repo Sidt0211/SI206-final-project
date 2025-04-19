@@ -1,289 +1,110 @@
-import requests
+# Database creation
 import sqlite3
-import time
-from datetime import datetime
+import os
 
-# RapidAPI configuration
-api_key = "6ae1fbcc24mshe9cca7641e6cf24p1ddf00jsn503fd8228252"
-host = "free-nba.p.rapidapi.com"
-
-headers = {
-    "X-RapidAPI-Key": api_key,
-    "X-RapidAPI-Host": host
-}
-
-# Set up database
-def setup_database():
+def create_database():
+    """
+    Creates the SQLite database and tables for storing NBA statistics.
+    """
+    # Create database if it doesn't exist
     conn = sqlite3.connect('nba_stats.db')
     cursor = conn.cursor()
     
-    # Create teams table
+    # Create Teams table
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS teams (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        abbreviation TEXT,
-        city TEXT
+    CREATE TABLE IF NOT EXISTS Teams (
+        team_id INTEGER PRIMARY KEY,
+        team_name TEXT UNIQUE,
+        team_abbr TEXT UNIQUE
     )
     ''')
     
-    # Create stats table
+    # Create ThreePointStats table
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS team_stats (
+    CREATE TABLE IF NOT EXISTS ThreePointStats (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         team_id INTEGER,
-        team_name TEXT,
         season TEXT,
+        three_pt_percentage REAL,
         win_percentage REAL,
-        defensive_rating REAL,
-        games_played INTEGER,
-        FOREIGN KEY (team_id) REFERENCES teams (id)
+        FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+        UNIQUE(team_id, season)
     )
     ''')
     
-    conn.commit()
-    return conn, cursor
-
-# Function to get all NBA teams
-def get_teams():
-    url = "https://free-nba.p.rapidapi.com/teams"
-    response = requests.get(url, headers=headers)
-    
-    if response.status_code == 200:
-        return response.json()['data']
-    else:
-        print(f"Error fetching teams: {response.status_code}")
-        return None
-
-# Function to get games for a specific season and team
-def get_team_games(team_id, season, per_page=100):
-    all_games = []
-    page = 1
-    
-    while True:
-        url = "https://free-nba.p.rapidapi.com/games"
-        querystring = {
-            "page": str(page),
-            "per_page": str(per_page),
-            "team_ids[]": str(team_id),
-            "seasons[]": str(season)
-        }
-        
-        response = requests.get(url, headers=headers, params=querystring)
-        
-        if response.status_code == 200:
-            data = response.json()
-            games = data['data']
-            all_games.extend(games)
-            
-            # Check if we've fetched all pages
-            if len(games) < per_page:
-                break
-            
-            page += 1
-            time.sleep(1)  # Avoid rate limiting
-        else:
-            print(f"Error fetching games: {response.status_code}")
-            break
-    
-    return all_games
-
-# Function to calculate defensive rating and win percentage
-def calculate_team_stats(team_id, games):
-    wins = 0
-    total_games = 0
-    points_allowed = 0
-    
-    for game in games:
-        home_team = game['home_team']
-        visitor_team = game['visitor_team']
-        
-        # Determine if our team is home or away
-        is_home = home_team['id'] == team_id
-        
-        our_score = game['home_team_score'] if is_home else game['visitor_team_score']
-        other_score = game['visitor_team_score'] if is_home else game['home_team_score']
-        
-        # Count wins
-        if our_score > other_score:
-            wins += 1
-        
-        # Track points allowed
-        points_allowed += other_score
-        total_games += 1
-    
-    # Calculate stats
-    win_percentage = (wins / total_games) * 100 if total_games > 0 else 0
-    defensive_rating = points_allowed / total_games if total_games > 0 else 0
-    
-    return {
-        'win_percentage': win_percentage,
-        'defensive_rating': defensive_rating,
-        'games_played': total_games
-    }
-
-# Function to store teams in the database
-def store_teams(cursor, teams):
-    for team in teams:
-        cursor.execute(
-            "INSERT OR REPLACE INTO teams (id, name, abbreviation, city) VALUES (?, ?, ?, ?)",
-            (team['id'], team['full_name'], team['abbreviation'], team['city'])
-        )
-
-# Function to store team stats in the database
-def store_team_stats(cursor, team_id, team_name, season, stats):
-    cursor.execute(
-        """
-        INSERT INTO team_stats 
-        (team_id, team_name, season, win_percentage, defensive_rating, games_played) 
-        VALUES (?, ?, ?, ?, ?, ?)
-        """,
-        (
-            team_id, 
-            team_name, 
-            season, 
-            stats['win_percentage'], 
-            stats['defensive_rating'], 
-            stats['games_played']
-        )
+    # Create DefensiveStats table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS DefensiveStats (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        team_id INTEGER,
+        season TEXT,
+        defensive_rating REAL,
+        win_percentage REAL,
+        FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+        UNIQUE(team_id, season)
     )
-
-# Function to get summary statistics from the database
-def get_summary_statistics(cursor):
-    print("\n--- Summary Statistics ---")
+    ''')
     
-    # Average defensive rating and win percentage by season
-    print("\nSeason Averages:")
-    cursor.execute("""
-    SELECT season, 
-           AVG(defensive_rating) as avg_defensive_rating, 
-           AVG(win_percentage) as avg_win_percentage
-    FROM team_stats
-    GROUP BY season
-    ORDER BY season
-    """)
+    # Create PlayerEfficiency table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS PlayerEfficiency (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        team_id INTEGER,
+        season TEXT,
+        top_player_name TEXT,
+        top_player_per REAL,
+        win_percentage REAL,
+        FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+        UNIQUE(team_id, season)
+    )
+    ''')
     
-    seasons = cursor.fetchall()
-    for season, def_rating, win_pct in seasons:
-        print(f"Season {season}: Avg Defensive Rating: {def_rating:.2f}, Avg Win Percentage: {win_pct:.2f}%")
+    # Insert NBA teams data
+    nba_teams = [
+        (1, "Atlanta Hawks", "ATL"),
+        (2, "Boston Celtics", "BOS"),
+        (3, "Brooklyn Nets", "BKN"),
+        (4, "Charlotte Hornets", "CHA"),
+        (5, "Chicago Bulls", "CHI"),
+        (6, "Cleveland Cavaliers", "CLE"),
+        (7, "Dallas Mavericks", "DAL"),
+        (8, "Denver Nuggets", "DEN"),
+        (9, "Detroit Pistons", "DET"),
+        (10, "Golden State Warriors", "GSW"),
+        (11, "Houston Rockets", "HOU"),
+        (12, "Indiana Pacers", "IND"),
+        (13, "Los Angeles Clippers", "LAC"),
+        (14, "Los Angeles Lakers", "LAL"),
+        (15, "Memphis Grizzlies", "MEM"),
+        (16, "Miami Heat", "MIA"),
+        (17, "Milwaukee Bucks", "MIL"),
+        (18, "Minnesota Timberwolves", "MIN"),
+        (19, "New Orleans Pelicans", "NOP"),
+        (20, "New York Knicks", "NYK"),
+        (21, "Oklahoma City Thunder", "OKC"),
+        (22, "Orlando Magic", "ORL"),
+        (23, "Philadelphia 76ers", "PHI"),
+        (24, "Phoenix Suns", "PHX"),
+        (25, "Portland Trail Blazers", "POR"),
+        (26, "Sacramento Kings", "SAC"),
+        (27, "San Antonio Spurs", "SAS"),
+        (28, "Toronto Raptors", "TOR"),
+        (29, "Utah Jazz", "UTA"),
+        (30, "Washington Wizards", "WAS")
+    ]
     
-    # Best defensive teams by season
-    print("\nBest Defensive Teams by Season:")
-    cursor.execute("""
-    SELECT t1.season, t1.team_name, t1.defensive_rating, t1.win_percentage
-    FROM team_stats t1
-    JOIN (
-        SELECT season, MIN(defensive_rating) as min_rating
-        FROM team_stats
-        GROUP BY season
-    ) t2
-    ON t1.season = t2.season AND t1.defensive_rating = t2.min_rating
-    ORDER BY t1.season
-    """)
+    # Insert teams data, ignoring if already exists
+    for team in nba_teams:
+        try:
+            cursor.execute("INSERT INTO Teams (team_id, team_name, team_abbr) VALUES (?, ?, ?)", team)
+        except sqlite3.IntegrityError:
+            pass  # Skip if team already exists
     
-    best_defense = cursor.fetchall()
-    for season, team, def_rating, win_pct in best_defense:
-        print(f"Season {season}: {team} - Defensive Rating: {def_rating:.2f}, Win Percentage: {win_pct:.2f}%")
-    
-    # Teams with highest win percentage by season
-    print("\nTeams with Highest Win Percentage by Season:")
-    cursor.execute("""
-    SELECT t1.season, t1.team_name, t1.win_percentage, t1.defensive_rating
-    FROM team_stats t1
-    JOIN (
-        SELECT season, MAX(win_percentage) as max_win_pct
-        FROM team_stats
-        GROUP BY season
-    ) t2
-    ON t1.season = t2.season AND t1.win_percentage = t2.max_win_pct
-    ORDER BY t1.season
-    """)
-    
-    best_record = cursor.fetchall()
-    for season, team, win_pct, def_rating in best_record:
-        print(f"Season {season}: {team} - Win Percentage: {win_pct:.2f}%, Defensive Rating: {def_rating:.2f}")
-    
-    # Correlation between defensive rating and win percentage
-    # Note: SQLite doesn't have a built-in correlation function,
-    # so we'll use a simple approximation based on aggregates
-    cursor.execute("""
-    SELECT 
-        COUNT(*) as n,
-        SUM(defensive_rating) as sum_x,
-        SUM(win_percentage) as sum_y,
-        SUM(defensive_rating*defensive_rating) as sum_xx,
-        SUM(win_percentage*win_percentage) as sum_yy,
-        SUM(defensive_rating*win_percentage) as sum_xy
-    FROM team_stats
-    """)
-    
-    n, sum_x, sum_y, sum_xx, sum_yy, sum_xy = cursor.fetchone()
-    
-    # Calculate correlation coefficient
-    numerator = n * sum_xy - sum_x * sum_y
-    denominator = ((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)) ** 0.5
-    
-    if denominator != 0:
-        correlation = numerator / denominator
-        print(f"\nCorrelation between defensive rating and win percentage: {correlation:.4f}")
-        if correlation < 0:
-            print("This negative correlation suggests that teams with lower defensive ratings (fewer points allowed per game) tend to have higher win percentages.")
-    else:
-        print("\nCould not calculate correlation.")
-
-# Main function to collect stats for all teams across seasons
-def collect_nba_stats():
-    # Set up database connection
-    conn, cursor = setup_database()
-    
-    # Get all teams
-    teams = get_teams()
-    if not teams:
-        conn.close()
-        return
-    
-    # Store teams in database
-    store_teams(cursor, teams)
+    # Commit changes and close connection
     conn.commit()
-    
-    # Define the seasons we want to analyze
-    seasons = ["2019", "2020", "2021", "2022", "2023", "2024"]
-    
-    # Process each team and season
-    for team in teams:
-        team_id = team['id']
-        team_name = team['full_name']
-        print(f"Processing {team_name}...")
-        
-        for season in seasons:
-            print(f"  Season {season}...")
-            
-            # Get all games for this team and season
-            games = get_team_games(team_id, season)
-            
-            # Skip if no games found
-            if not games:
-                print(f"  No games found for {team_name} in {season}")
-                continue
-            
-            # Calculate stats
-            stats = calculate_team_stats(team_id, games)
-            
-            # Store stats in database
-            store_team_stats(cursor, team_id, team_name, season, stats)
-            conn.commit()
-            
-            # Avoid hitting rate limits
-            time.sleep(1)
-    
-    # Generate summary statistics
-    get_summary_statistics(cursor)
-    
-    # Close database connection
     conn.close()
-    print(f"\nData collection complete. Results stored in nba_stats.db")
+    
+    print("Database and tables created successfully!")
 
-# Run the collection
 if __name__ == "__main__":
-    print("Starting NBA stats collection...")
-    collect_nba_stats()
+    create_database()
