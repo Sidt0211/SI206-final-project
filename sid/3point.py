@@ -11,40 +11,57 @@ def get_connection():
 
 def get_current_season(cur):
     """Determine which season to process next for 3PT data"""
-    # Check all seasons in order
-    seasons = ["2019_2020", "2020_2021", "2021_2022", "2022_2023", "2023_2024"]
+    seasons = [(1, "2019-2020"), (2, "2020-2021"), (3, "2021-2022"), 
+              (4, "2022-2023"), (5, "2023-2024")]
     
-    for season in seasons:
+    print("\nChecking seasons completion status:")
+    for season_id, season_name in seasons:
         # Count how many teams have data for this season
-        cur.execute(f"SELECT COUNT(*) FROM ThreePointStats_{season}")
+        cur.execute("""
+            SELECT COUNT(DISTINCT team_id) FROM ThreePointStats
+            WHERE season_id = ?
+        """, (season_id,))
         count = cur.fetchone()[0]
+        print(f"  Season {season_name} (ID: {season_id}): {count}/30 teams")
         
         # If this season isn't complete, use it
         if count < 30:
-            return season.replace("_", "-"), count
+            print(f"  → Selected for processing: {season_name}")
+            return season_name, season_id, count
     
     # All seasons complete
-    return None, 0
+    print("  All seasons complete!")
+    return None, None, 0
 
-def get_teams_to_process(cur, season_db, limit=15):
+def get_teams_to_process(cur, season_id, limit=15):
     """Get teams that don't have 3PT data yet for the specified season"""
-    cur.execute(f"""
-        SELECT t.team_id, t.team_name 
-        FROM Teams t 
-        LEFT JOIN ThreePointStats_{season_db} s ON t.team_id = s.team_id
-        WHERE s.team_id IS NULL
+    # Get teams that already have data for this season
+    cur.execute("""
+        SELECT team_id FROM ThreePointStats 
+        WHERE season_id = ?
+    """, (season_id,))
+    existing_team_ids = [row[0] for row in cur.fetchall()]
+    
+    # Get teams that don't have data yet
+    placeholders = ','.join(['?'] * len(existing_team_ids)) if existing_team_ids else "0"
+    query = f"""
+        SELECT t.team_id, t.team_name, t.team_abbreviation
+        FROM Teams t
+        WHERE t.team_id NOT IN ({placeholders})
         ORDER BY t.team_id
-        LIMIT {limit}
-    """)
+        LIMIT ?
+    """
+    
+    # If there are existing teams, include them in the query
+    params = existing_team_ids + [limit] if existing_team_ids else [limit]
+    cur.execute(query, params)
+    
     return cur.fetchall()
 
-def three_point_data(cur, conn, season, limit=15):
+def three_point_data(cur, conn, season, season_id, limit=15):
     """Get 3-point shooting percentage data for a specific season"""
-    # Convert season format to database table format (replace dash with underscore)
-    db_season = season.replace("-", "_")
-    
     # Get teams that need processing
-    teams_to_process = get_teams_to_process(cur, db_season, limit)
+    teams_to_process = get_teams_to_process(cur, season_id, limit)
     
     if not teams_to_process:
         print(f"All teams already have 3PT data for season {season}")
@@ -95,17 +112,28 @@ def three_point_data(cur, conn, season, limit=15):
             three_pt_made = int(cols[6].text) if cols[6].text else 0
             three_pt_attempts = int(cols[7].text) if cols[7].text else 0
             three_pt_percentage = float(cols[8].text) if cols[8].text else 0
-            games_played = int(cols[1].text) if cols[4].text else 0
+            games_played = int(cols[1].text) if cols[1].text else 0
             
-            # Insert 3-point data into season-specific table
-            cur.execute(f'''
-                INSERT OR REPLACE INTO ThreePointStats_{db_season} 
-                (team_id, three_pt_percentage, three_pt_made, three_pt_attempts, games_played)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (team_id, three_pt_percentage, three_pt_made, three_pt_attempts, games_played))
+            # Check if this team-season combination already exists
+            cur.execute("""
+                SELECT COUNT(*) FROM ThreePointStats 
+                WHERE team_id = ? AND season_id = ?
+            """, (team_id, season_id))
+            exists = cur.fetchone()[0] > 0
             
-            counter += 1
-            print(f"Added 3PT stats for {team_name} ({season})")
+            if not exists:
+                # Insert 3-point data into consolidated table
+                cur.execute('''
+                    INSERT INTO ThreePointStats 
+                    (team_id, season_id, three_pt_percentage, three_pt_made, three_pt_attempts, games_played)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (team_id, season_id, three_pt_percentage, three_pt_made, three_pt_attempts, games_played))
+                
+                counter += 1
+                print(f"Added 3PT stats for {team_name} ({season})")
+            else:
+                print(f"Team {team_name} already has data for season {season}, skipping")
+                
         except (ValueError, IndexError) as e:
             print(f"Error processing 3PT stats for {team_name}: {e}")
     
@@ -116,7 +144,7 @@ def main():
     conn, cur = get_connection()
     
     # Get the current season to process
-    current_season, completed_count = get_current_season(cur)
+    current_season, season_id, completed_count = get_current_season(cur)
     
     if not current_season:
         print("All seasons are complete! No more 3PT data to collect.")
@@ -126,15 +154,18 @@ def main():
     print(f"Processing season: {current_season} ({completed_count}/30 teams complete)")
     
     # Process a batch of teams (max 15) for the current season
-    count = three_point_data(cur, conn, current_season, limit=15)
+    count = three_point_data(cur, conn, current_season, season_id, limit=15)
     print(f"Added {count} 3PT records for season {current_season}")
     
     # Show overall progress
     print("\nProgress Report:")
-    for season in ["2019_2020", "2020_2021", "2021_2022", "2022_2023", "2023_2024"]:
-        cur.execute(f"SELECT COUNT(*) FROM ThreePointStats_{season}")
+    seasons = [(1, "2019-2020"), (2, "2020-2021"), (3, "2021-2022"), 
+              (4, "2022-2023"), (5, "2023-2024")]
+    
+    for season_id, season_name in seasons:
+        cur.execute("SELECT COUNT(DISTINCT team_id) FROM ThreePointStats WHERE season_id = ?", (season_id,))
         count = cur.fetchone()[0]
-        print(f"Season {season.replace('_', '-')}: {count}/30 teams have 3PT data")
+        print(f"Season {season_name}: {count}/30 teams have 3PT data")
     
     conn.close()
 

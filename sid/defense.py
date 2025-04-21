@@ -11,7 +11,29 @@ def get_connection(db_name="nba-stats.db"):
     conn = sqlite3.connect(path + "/" + db_name)
     return conn, conn.cursor()
 
-
+def get_current_season(cur):
+    """Determine which season to process next for defensive stats data"""
+    seasons = [(1, "2019-2020"), (2, "2020-2021"), (3, "2021-2022"), 
+              (4, "2022-2023"), (5, "2023-2024")]
+    
+    print("\nChecking seasons completion status:")
+    for season_id, season_name in seasons:
+        # Count how many teams have data for this season
+        cur.execute("""
+            SELECT COUNT(DISTINCT team_id) FROM DefensiveStats
+            WHERE season_id = ?
+        """, (season_id,))
+        count = cur.fetchone()[0]
+        print(f"  Season {season_name} (ID: {season_id}): {count}/30 teams")
+        
+        # If this season isn't complete, use it
+        if count < 30:
+            print(f"  → Selected for processing: {season_name}")
+            return season_name, season_id, count
+    
+    # All seasons complete
+    print("  All seasons complete!")
+    return None, None, 0
 
 def get_team_mappings():
     """Get mappings between NBA API team IDs and our database team IDs"""
@@ -22,22 +44,35 @@ def get_team_mappings():
     nba_id_to_abbr = {team['id']: team['abbreviation'] for team in nba_teams}
     return nba_id_to_abbr
 
-def get_teams_to_process(cur, season_db, limit=15):
+def get_teams_to_process(cur, season_id, limit=15):
     """Get teams that don't have defensive stats yet for the specified season"""
-    cur.execute(f"""
-        SELECT t.team_id, t.team_name, t.team_abbreviation 
-        FROM Teams t 
-        LEFT JOIN DefensiveStats_{season_db} ds ON t.team_id = ds.team_id
-        WHERE ds.team_id IS NULL
+    # Get teams that already have data for this season
+    cur.execute("""
+        SELECT team_id FROM DefensiveStats 
+        WHERE season_id = ?
+    """, (season_id,))
+    existing_team_ids = [row[0] for row in cur.fetchall()]
+    
+    # Get teams that don't have data yet
+    placeholders = ','.join(['?'] * len(existing_team_ids)) if existing_team_ids else "0"
+    query = f"""
+        SELECT t.team_id, t.team_name, t.team_abbreviation
+        FROM Teams t
+        WHERE t.team_id NOT IN ({placeholders})
         ORDER BY t.team_id
-        LIMIT {limit}
-    """)
+        LIMIT ?
+    """
+    
+    # If there are existing teams, include them in the query
+    params = existing_team_ids + [limit] if existing_team_ids else [limit]
+    cur.execute(query, params)
+    
     return cur.fetchall()
 
 def process_team_defensive_stats(team_nba_id, season):
     """Process defensive stats for a specific team and season"""
-    # Convert season format (2019_2020 → 2019-20)
-    season_api = f"{season.split('_')[0][:4]}-{season.split('_')[1][-2:]}"
+    # Convert season format (2019-2020 → 2019-20)
+    season_api = f"{season.split('-')[0][:4]}-{season.split('-')[1][-2:]}"
     
     try:
         # Call the TeamYearByYearStats endpoint
@@ -73,13 +108,13 @@ def process_team_defensive_stats(team_nba_id, season):
         print(f"Error fetching data for team {team_nba_id} in season {season_api}: {e}")
         return None
 
-def process_defensive_stats_batch(cur, conn, season_db, nba_id_mapping, limit=15):
+def process_defensive_stats_batch(cur, conn, season, season_id, nba_id_mapping, limit=15):
     """Process defensive stats for a batch of teams"""
     # Get teams that need processing
-    teams_to_process = get_teams_to_process(cur, season_db, limit)
+    teams_to_process = get_teams_to_process(cur, season_id, limit)
     
     if not teams_to_process:
-        print(f"All teams already have defensive stats for season {season_db}")
+        print(f"All teams already have defensive stats for season {season}")
         return 0
     
     # Get mapping from NBA abbreviation to our team_id
@@ -96,29 +131,40 @@ def process_defensive_stats_batch(cur, conn, season_db, nba_id_mapping, limit=15
             nba_team_id = abbr_to_nba_id[our_team_abbr]
             
             # Get defensive stats for this team
-            defensive_stats = process_team_defensive_stats(nba_team_id, season_db)
+            defensive_stats = process_team_defensive_stats(nba_team_id, season)
             
             if defensive_stats:
-                # Insert into database
-                try:
-                    cur.execute(f'''
-                        INSERT OR REPLACE INTO DefensiveStats_{season_db} 
-                        (team_id, defensive_rebounds, steals, blocks, personal_fouls, games_played)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    ''', (
-                        our_team_id, 
-                        defensive_stats['defensive_rebounds'], 
-                        defensive_stats['steals'], 
-                        defensive_stats['blocks'], 
-                        defensive_stats['personal_fouls'], 
-                        defensive_stats['games_played']
-                    ))
-                    
-                    counter += 1
-                    print(f"Added defensive stats for {our_team_abbr} ({season_db.replace('_', '-')})")
-                    
-                except sqlite3.Error as e:
-                    print(f"Database error for {our_team_abbr}: {e}")
+                # Check if this team-season combination already exists
+                cur.execute("""
+                    SELECT COUNT(*) FROM DefensiveStats 
+                    WHERE team_id = ? AND season_id = ?
+                """, (our_team_id, season_id))
+                exists = cur.fetchone()[0] > 0
+                
+                if not exists:
+                    # Insert into database
+                    try:
+                        cur.execute('''
+                            INSERT INTO DefensiveStats 
+                            (team_id, season_id, defensive_rebounds, steals, blocks, personal_fouls, games_played)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ''', (
+                            our_team_id,
+                            season_id, 
+                            defensive_stats['defensive_rebounds'], 
+                            defensive_stats['steals'], 
+                            defensive_stats['blocks'], 
+                            defensive_stats['personal_fouls'], 
+                            defensive_stats['games_played']
+                        ))
+                        
+                        counter += 1
+                        print(f"Added defensive stats for {our_team_abbr} ({season})")
+                        
+                    except sqlite3.Error as e:
+                        print(f"Database error for {our_team_abbr}: {e}")
+                else:
+                    print(f"Team {our_team_abbr} already has data for season {season}, skipping")
             
             # Sleep to avoid rate limiting
             time.sleep(2)
@@ -130,34 +176,32 @@ def main():
     # Connect to database
     conn, cur = get_connection()
     
-    
     # Get NBA team mappings
     nba_id_mapping = get_team_mappings()
     
     # Get current season to process
-    seasons = ["2019_2020", "2020_2021", "2021_2022", "2022_2023", "2023_2024"]
+    current_season, season_id, completed_count = get_current_season(cur)
     
-    for season in seasons:
-        # Check if this season needs processing
-        cur.execute(f"SELECT COUNT(*) FROM DefensiveStats_{season}")
-        count = cur.fetchone()[0]
+    if not current_season:
+        print("All seasons are complete! No more defensive stats data to collect.")
+        conn.close()
+        return
         
-        if count < 30:
-            print(f"Processing season {season.replace('_', '-')} ({count}/30 teams complete)")
-            
-            # Process up to 15 teams for this season (to stay under 25 item limit)
-            added = process_defensive_stats_batch(cur, conn, season, nba_id_mapping, limit=15)
-            print(f"Added defensive stats for {added} teams in season {season.replace('_', '-')}")
-            
-            # Stop after processing one incomplete season
-            break
+    print(f"Processing season: {current_season} ({completed_count}/30 teams complete)")
+    
+    # Process up to 15 teams for this season (to stay under 25 item limit)
+    added = process_defensive_stats_batch(cur, conn, current_season, season_id, nba_id_mapping, limit=15)
+    print(f"Added defensive stats for {added} teams in season {current_season}")
     
     # Show overall progress
     print("\nDefensive Stats Progress Report:")
-    for season in seasons:
-        cur.execute(f"SELECT COUNT(*) FROM DefensiveStats_{season}")
+    seasons = [(1, "2019-2020"), (2, "2020-2021"), (3, "2021-2022"), 
+              (4, "2022-2023"), (5, "2023-2024")]
+    
+    for season_id, season_name in seasons:
+        cur.execute("SELECT COUNT(DISTINCT team_id) FROM DefensiveStats WHERE season_id = ?", (season_id,))
         count = cur.fetchone()[0]
-        print(f"Season {season.replace('_', '-')}: {count}/30 teams have defensive stats")
+        print(f"Season {season_name}: {count}/30 teams have defensive stats")
     
     conn.close()
 
