@@ -121,7 +121,7 @@ def process_defensive_stats_batch(cur, conn, season_db, nba_id_mapping, limit=15
                     print(f"Database error for {our_team_abbr}: {e}")
             
             # Sleep to avoid rate limiting
-            time.sleep(5)
+            time.sleep(2)
     
     conn.commit()
     return counter
