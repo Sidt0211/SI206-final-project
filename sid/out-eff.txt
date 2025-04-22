@@ -1,8 +1,4 @@
-NBA Team Player Efficiency Analysis
-==================================
-
-Team Statistics (Ranked by Efficiency):
---------------------------------------
+NBA Team Player Efficiency Statst
 
 1. Denver Nuggets (DEN):
   Average Efficiency: 23.91

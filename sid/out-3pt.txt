@@ -1,10 +1,7 @@
 NBA 3-Point Shooting and Win Percentage Analysis
-==============================================
-
 Correlation between 3PT% and Win%: 0.7525
 
 Team Statistics (Ranked by Win Percentage):
-------------------------------------------
 Team                      Abbr  Avg 3PT%   Avg Win%  
 -------------------------------------------------------
 Milwaukee Bucks           MIL   0.3702    0.6666
@@ -37,7 +34,5 @@ San Antonio Spurs         SAS   0.3540    0.3720
 Houston Rockets           HOU   0.3424    0.3718
 Washington Wizards        WAS   0.3530    0.3712
 Detroit Pistons           DET   0.3486    0.2478
-
-Regression Equation: Win% = 8.1178 × 3PT% + -2.4286
 
 Interpretation: There is a strong positive correlation between 3-point shooting percentage and win percentage.

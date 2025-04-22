@@ -1,6 +1,4 @@
 NBA Defensive Statistics and Win Percentage Analysis
-=================================================
-
 Correlation with Win Percentage:
 - Defensive Rebounds: 0.5997
 - Steals: 0.0149
@@ -9,7 +7,6 @@ Correlation with Win Percentage:
 - Composite Rating: 0.3383
 
 Team Statistics (Ranked by Win Percentage):
-------------------------------------------
 Team                      Abbr  Def Rating Reb/G    Stl/G    Blk/G    Win%    
 ---------------------------------------------------------------------------
 Milwaukee Bucks           MIL   34.8625    37.75    7.22    4.89    0.6666
@@ -43,9 +40,4 @@ Houston Rockets           HOU   32.7485    33.41    7.74    4.79    0.3718
 Washington Wizards        WAS   31.9369    33.51    7.22    4.72    0.3712
 Detroit Pistons           DET   30.8251    32.23    7.19    4.58    0.2478
 
-Regression Equation: Win% = 0.0212 × Defensive Rating + -0.2012
-
 Interpretation: There is a weak correlation between defensive rating and win percentage.
-
-Defensive Rating Formula:
-(2.0 × Blocks/Game + 1.5 × Steals/Game + 0.5 × Defensive Rebounds/Game - 0.25 × Fouls/Game)

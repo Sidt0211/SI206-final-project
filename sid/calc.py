@@ -5,14 +5,8 @@ import pandas as pd
 import os
 
 def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
-    """
-    Calculate average 3PT% and win% for each team over 5 seasons,
-    visualize their correlation, and write the data to a file.
-    """
-    # Connect to the database
     conn = sqlite3.connect(db_name)
-    
-    # SQL query to join tables and calculate averages
+
     query = """
     SELECT 
         t.team_id,
@@ -32,14 +26,11 @@ def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
         avg_win_pct DESC
     """
     
-    # Execute query and load results into DataFrame
     df = pd.read_sql_query(query, conn)
-    
-    # Calculate correlation coefficient
     correlation = np.corrcoef(df['avg_3pt_pct'], df['avg_win_pct'])[0, 1]
     
-    # Create a text file with the results
-    with open('3pt_win_correlation.txt', 'w') as f:
+    # Write out the calculated data to a file as text
+    with open('out-3pt.txt', 'w') as f:
         f.write("NBA 3-Point Shooting and Win Percentage Analysis\n")
         f.write(f"Correlation between 3PT% and Win%: {correlation:.4f}\n\n")
         f.write("Team Statistics (Ranked by Win Percentage):\n")
@@ -63,15 +54,14 @@ def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
     
     plt.figure(figsize=(12, 8))
     
-    # Create scatter plot
     scatter = plt.scatter(
         df['avg_3pt_pct'], 
         df['avg_win_pct'],
-        s=100,  # Point size
-        c=df['avg_3pt_pct'],  # Color based on 3PT%
-        cmap='viridis',  # Color map
-        alpha=0.8,  # Transparency
-        edgecolors='black'  # Outline color
+        s=100, 
+        c=df['avg_3pt_pct'],
+        cmap='viridis', 
+        alpha=0.8,
+        edgecolors='black'
     )
     
     # Add regression line
@@ -102,12 +92,9 @@ def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
         bbox=dict(facecolor='white', alpha=0.7)
     )
     
-    # Add colorbar
-    cbar = plt.colorbar(scatter)
-    cbar.set_label('Average 3-Point Percentage')
     
     # Add details and styling
-    plt.title('NBA Team Success vs. 3-Point Shooting (2019-2024)', fontsize=16)
+    plt.title('NBA 3-Point Shooting vs. Win Percentage (2019-2024)', fontsize=16)
     plt.xlabel('Average 3-Point Percentage', fontsize=14)
     plt.ylabel('Average Win Percentage', fontsize=14)
     plt.grid(True, alpha=0.3)
@@ -120,7 +107,7 @@ def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
     plt.axvline(x=median_3pt, color='gray', linestyle='--', alpha=0.5)
     plt.axhline(y=median_win, color='gray', linestyle='--', alpha=0.5)
     
-    # Add quadrant labels
+    # Used AI to help me divide the graph into quadrants and annotate them
     plt.text(df['avg_3pt_pct'].min() + 0.005, median_win + (df['avg_win_pct'].max() - median_win)/2, 
              "Low 3PT%\nHigh Win%", ha='left', va='center', fontsize=10,
              bbox=dict(facecolor='white', alpha=0.5))
@@ -146,14 +133,8 @@ def calculate_and_visualize_3pt_win_correlation(db_name="nba-stats.db"):
 
 
 def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
-    """
-    Calculate average defensive stats and win% for each team over 5 seasons,
-    visualize their correlation, and write the data to a file.
-    """
-    # Connect to the database
+
     conn = sqlite3.connect(db_name)
-    
-    # SQL query to join tables and calculate averages
     query = """
     SELECT 
         t.team_id,
@@ -176,7 +157,6 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         avg_win_pct DESC
     """
     
-    # Execute query and load results into DataFrame
     df = pd.read_sql_query(query, conn)
     
     # Calculate a composite defensive rating
@@ -188,10 +168,7 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         0.25 * df['avg_fouls_per_game']
     )
     
-    # Calculate correlation coefficient between defensive rating and win percentage
     correlation = np.corrcoef(df['defensive_rating'], df['avg_win_pct'])[0, 1]
-    
-    # Calculate correlations for individual defensive components
     correlations = {
         'Defensive Rebounds': np.corrcoef(df['avg_def_reb_per_game'], df['avg_win_pct'])[0, 1],
         'Steals': np.corrcoef(df['avg_steals_per_game'], df['avg_win_pct'])[0, 1],
@@ -200,10 +177,9 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         'Composite Rating': correlation
     }
     
-    # Create a text file with the results
-    with open('defense_win_correlation.txt', 'w') as f:
+    # Write out the calculated data to a file as text
+    with open('out-defense.txt', 'w') as f:
         f.write("NBA Defensive Statistics and Win Percentage Analysis\n")
-        f.write("=================================================\n\n")
         
         # Write correlation statistics
         f.write("Correlation with Win Percentage:\n")
@@ -213,7 +189,6 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         
         # Write team-by-team statistics
         f.write("Team Statistics (Ranked by Win Percentage):\n")
-        f.write("------------------------------------------\n")
         f.write(f"{'Team':<25} {'Abbr':<5} {'Def Rating':<10} {'Reb/G':<8} {'Stl/G':<8} {'Blk/G':<8} {'Win%':<8}\n")
         f.write("-" * 75 + "\n")
         
@@ -225,10 +200,6 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
             f.write(f"{row['avg_blocks_per_game']:.2f}    ")
             f.write(f"{row['avg_win_pct']:.4f}\n")
         
-        # Calculate and write regression equation
-        slope, intercept = np.polyfit(df['defensive_rating'], df['avg_win_pct'], 1)
-        f.write(f"\nRegression Equation: Win% = {slope:.4f} × Defensive Rating + {intercept:.4f}\n")
-        
         # Add interpretation
         if correlation > 0.7:
             f.write("\nInterpretation: There is a strong positive correlation between ")
@@ -239,32 +210,23 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         else:
             f.write("\nInterpretation: There is a weak correlation between ")
             f.write("defensive rating and win percentage.\n")
-        
-        # Add explanation of defensive rating formula
-        f.write("\nDefensive Rating Formula:\n")
-        f.write("(2.0 × Blocks/Game + 1.5 × Steals/Game + 0.5 × Defensive Rebounds/Game - 0.25 × Fouls/Game)\n")
     
-    # Create visualization
     plt.figure(figsize=(12, 8))
-    
-    # Create scatter plot
     scatter = plt.scatter(
         df['defensive_rating'], 
         df['avg_win_pct'],
-        s=100,  # Point size
-        c=df['defensive_rating'],  # Color based on defensive rating
-        cmap='coolwarm',  # Color map
-        alpha=0.8,  # Transparency
-        edgecolors='black'  # Outline color
+        s=100, 
+        c=df['defensive_rating'], 
+        cmap='coolwarm',  
+        alpha=0.8, 
+        edgecolors='black' 
     )
     
-    # Add regression line
     x = df['defensive_rating']
     y = df['avg_win_pct']
     m, b = np.polyfit(x, y, 1)
     plt.plot(x, m*x + b, 'g-', linewidth=2, label=f'y = {m:.4f}x + {b:.4f}')
     
-    # Add team labels
     for i, row in df.iterrows():
         plt.annotate(
             row['team_abbreviation'],
@@ -277,7 +239,6 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
             bbox=dict(boxstyle="round,pad=0.3", fc='darkgreen', alpha=0.7)
         )
     
-    # Add correlation coefficient text
     plt.text(
         0.05, 0.95, 
         f"Correlation: {correlation:.4f}", 
@@ -286,25 +247,17 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
         bbox=dict(facecolor='white', alpha=0.7)
     )
     
-    # Add colorbar
-    cbar = plt.colorbar(scatter)
-    cbar.set_label('Defensive Rating')
-    
-    # Add details and styling
-    plt.title('NBA Team Success vs. Defensive Rating (2019-2024)', fontsize=16)
+    plt.title('NBA Defensive Rating vs. Win Percentage (2019-2024)', fontsize=16)
     plt.xlabel('Defensive Rating', fontsize=14)
     plt.ylabel('Average Win Percentage', fontsize=14)
     plt.grid(True, alpha=0.3)
     plt.legend()
     
-    # Add quadrant lines at median values
     median_def = df['defensive_rating'].median()
     median_win = df['avg_win_pct'].median()
     
     plt.axvline(x=median_def, color='gray', linestyle='--', alpha=0.5)
     plt.axhline(y=median_win, color='gray', linestyle='--', alpha=0.5)
-    
-    # Add quadrant labels
     plt.text(df['defensive_rating'].min() + 0.1, median_win + (df['avg_win_pct'].max() - median_win)/2, 
              "Low Defense\nHigh Win%", ha='left', va='center', fontsize=10,
              bbox=dict(facecolor='white', alpha=0.5))
@@ -321,7 +274,6 @@ def calculate_and_visualize_defense_win_correlation(db_name="nba-stats.db"):
              "High Defense\nLow Win%", ha='center', va='center', fontsize=10,
              bbox=dict(facecolor='white', alpha=0.5))
     
-    # Save and display the figure
     plt.tight_layout()
     plt.savefig('defense_win_correlation.png', dpi=300, bbox_inches='tight')
     
@@ -333,10 +285,7 @@ def calculate_and_visualize_team_efficiency(db_name="nba-stats.db"):
     Calculate average player efficiency for each team and create a visualization
     comparing teams against each other.
     """
-    # Connect to the database
     conn = sqlite3.connect(db_name)
-    
-    # SQL query to get player efficiency data
     player_query = """
     SELECT 
         t.team_id,
@@ -355,15 +304,12 @@ def calculate_and_visualize_team_efficiency(db_name="nba-stats.db"):
     # Execute query and load results into DataFrame
     player_df = pd.read_sql_query(player_query, conn)
     
-    # Calculate average efficiency for each team (top 5 players)
     team_efficiencies = []
-    
     for team_id in player_df['team_id'].unique():
         team_players = player_df[player_df['team_id'] == team_id].sort_values('efficiency', ascending=False)
         team_name = team_players.iloc[0]['team_name']
         team_abbr = team_players.iloc[0]['team_abbreviation']
         
-        # Get top 5 players (or all if fewer than 5)
         top_players = team_players.head(5)
         avg_efficiency = top_players['efficiency'].mean()
         
@@ -376,17 +322,11 @@ def calculate_and_visualize_team_efficiency(db_name="nba-stats.db"):
             'players': top_players[['player_name', 'efficiency']].to_dict('records')
         })
     
-    # Create DataFrame from team efficiencies
     efficiency_df = pd.DataFrame(team_efficiencies)
     
-    # Write results to a text file
-    with open('team_efficiency_comparison.txt', 'w') as f:
-        f.write("NBA Team Player Efficiency Analysis\n")
-        f.write("==================================\n\n")
-        
-        # Write team-by-team statistics
-        f.write("Team Statistics (Ranked by Efficiency):\n")
-        f.write("--------------------------------------\n")
+    # Write out the calculated data to a file as text
+    with open('out-eff.txt', 'w') as f:
+        f.write("NBA Team Player Efficiency Statst\n")
         
         # Sort by efficiency
         sorted_teams = efficiency_df.sort_values('avg_efficiency', ascending=False)
