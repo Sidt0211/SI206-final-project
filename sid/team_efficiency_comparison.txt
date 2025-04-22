@@ -1,0 +1,279 @@
+NBA Team Player Efficiency Analysis
+==================================
+
+Team Statistics (Ranked by Efficiency):
+--------------------------------------
+
+1. Denver Nuggets (DEN):
+  Average Efficiency: 23.91
+  Top Players:
+    1. Nikola Jokić: 42.19
+    2. Jamal Murray: 21.91
+    3. Michael Porter Jr.: 19.77
+    4. Christian Braun: 18.89
+    5. Aaron Gordon: 16.78
+
+2. New York Knicks (NYK):
+  Average Efficiency: 22.60
+  Top Players:
+    1. Karl-Anthony Towns: 30.33
+    2. Jalen Brunson: 24.02
+    3. Josh Hart: 23.60
+    4. OG Anunoby: 18.19
+    5. Mikal Bridges: 16.85
+
+3. Oklahoma City Thunder (OKC):
+  Average Efficiency: 21.94
+  Top Players:
+    1. Shai Gilgeous-Alexander: 33.03
+    2. Jalen Williams: 22.52
+    3. Isaiah Hartenstein: 21.77
+    4. Chet Holmgren: 19.69
+    5. Aaron Wiggins: 12.68
+
+4. Milwaukee Bucks (MIL):
+  Average Efficiency: 21.52
+  Top Players:
+    1. Giannis Antetokounmpo: 35.82
+    2. Damian Lillard: 25.31
+    3. Bobby Portis: 17.73
+    4. Brook Lopez: 16.19
+    5. Kyle Kuzma: 12.53
+
+5. Sacramento Kings (SAC):
+  Average Efficiency: 21.29
+  Top Players:
+    1. Domantas Sabonis: 30.96
+    2. Zach LaVine: 22.43
+    3. DeMar DeRozan: 20.68
+    4. Malik Monk: 17.12
+    5. Keegan Murray: 15.26
+
+6. Los Angeles Lakers (LAL):
+  Average Efficiency: 21.13
+  Top Players:
+    1. Luka Dončić: 29.04
+    2. LeBron James: 28.41
+    3. Austin Reaves: 21.18
+    4. Rui Hachimura: 14.68
+    5. Dorian Finney-Smith: 12.35
+
+7. Los Angeles Clippers (LAC):
+  Average Efficiency: 21.00
+  Top Players:
+    1. Ivica Zubac: 26.90
+    2. James Harden: 24.56
+    3. Kawhi Leonard: 21.59
+    4. Norman Powell: 17.58
+    5. Ben Simmons: 14.36
+
+8. Atlanta Hawks (ATL):
+  Average Efficiency: 20.95
+  Top Players:
+    1. Jalen Johnson: 25.08
+    2. Trae Young: 24.01
+    3. Onyeka Okongwu: 20.47
+    4. Dyson Daniels: 19.20
+    5. Jacob Toppin: 16.00
+
+9. Boston Celtics (BOS):
+  Average Efficiency: 20.84
+  Top Players:
+    1. Jayson Tatum: 27.86
+    2. Kristaps Porziņģis: 21.31
+    3. Jaylen Brown: 20.73
+    4. Derrick White: 18.55
+    5. Payton Pritchard: 15.76
+
+10. Cleveland Cavaliers (CLE):
+  Average Efficiency: 20.68
+  Top Players:
+    1. Evan Mobley: 24.58
+    2. Jarrett Allen: 22.51
+    3. Donovan Mitchell: 21.70
+    4. Darius Garland: 20.35
+    5. De'Andre Hunter: 14.26
+
+11. Dallas Mavericks (DAL):
+  Average Efficiency: 20.43
+  Top Players:
+    1. Anthony Davis: 24.33
+    2. Kyrie Irving: 23.34
+    3. Kai Jones: 18.67
+    4. Daniel Gafford: 18.37
+    5. P.J. Washington Jr.: 17.46
+
+12. Philadelphia 76ers (PHI):
+  Average Efficiency: 20.42
+  Top Players:
+    1. Joel Embiid: 24.58
+    2. Tyrese Maxey: 23.06
+    3. Quentin Grimes: 20.79
+    4. Paul George: 17.27
+    5. Kelly Oubre Jr.: 16.42
+
+13. San Antonio Spurs (SAS):
+  Average Efficiency: 20.06
+  Top Players:
+    1. Victor Wembanyama: 30.20
+    2. De'Aaron Fox: 23.71
+    3. Chris Paul: 15.60
+    4. Devin Vassell: 15.44
+    5. Jeremy Sochan: 15.35
+
+14. Detroit Pistons (DET):
+  Average Efficiency: 19.91
+  Top Players:
+    1. Cade Cunningham: 26.83
+    2. Jalen Duren: 21.71
+    3. Dennis Schröder: 18.61
+    4. Tobias Harris: 16.41
+    5. Tolu Smith III: 16.00
+
+15. New Orleans Pelicans (NOP):
+  Average Efficiency: 19.87
+  Top Players:
+    1. Zion Williamson: 26.10
+    2. Trey Murphy III: 20.53
+    3. Dejounte Murray: 19.90
+    4. CJ McCollum: 17.52
+    5. Yves Missi: 15.32
+
+16. Minnesota Timberwolves (MIN):
+  Average Efficiency: 19.66
+  Top Players:
+    1. Anthony Edwards: 24.14
+    2. Rudy Gobert: 22.10
+    3. Julius Randle: 20.52
+    4. Naz Reid: 16.15
+    5. Jaden McDaniels: 15.39
+
+17. Chicago Bulls (CHI):
+  Average Efficiency: 19.37
+  Top Players:
+    1. Nikola Vučević: 24.89
+    2. Josh Giddey: 22.03
+    3. Coby White: 18.61
+    4. Tre Jones: 16.50
+    5. Ayo Dosunmu: 14.83
+
+18. Memphis Grizzlies (MEM):
+  Average Efficiency: 19.26
+  Top Players:
+    1. Desmond Bane: 21.84
+    2. Ja Morant: 21.50
+    3. Jaren Jackson Jr.: 20.95
+    4. Santi Aldama: 16.32
+    5. Zach Edey: 15.71
+
+19. Phoenix Suns (PHX):
+  Average Efficiency: 19.10
+  Top Players:
+    1. Kevin Durant: 26.31
+    2. Devin Booker: 24.04
+    3. Bradley Beal: 16.70
+    4. Nick Richards: 15.39
+    5. Tyus Jones: 13.05
+
+20. Toronto Raptors (TOR):
+  Average Efficiency: 18.80
+  Top Players:
+    1. Jakob Poeltl: 22.67
+    2. Scottie Barnes: 22.15
+    3. RJ Barrett: 20.07
+    4. Immanuel Quickley: 17.27
+    5. Ochai Agbaji: 11.86
+
+21. Houston Rockets (HOU):
+  Average Efficiency: 18.75
+  Top Players:
+    1. Alperen Şengün: 24.37
+    2. Amen Thompson: 21.16
+    3. Jalen Green: 16.89
+    4. Tari Eason: 15.81
+    5. Fred VanVleet: 15.53
+
+22. Indiana Pacers (IND):
+  Average Efficiency: 18.56
+  Top Players:
+    1. Tyrese Haliburton: 24.12
+    2. Pascal Siakam: 22.22
+    3. Myles Turner: 18.08
+    4. Bennedict Mathurin: 15.18
+    5. Aaron Nesmith: 13.20
+
+23. Utah Jazz (UTA):
+  Average Efficiency: 18.48
+  Top Players:
+    1. Walker Kessler: 22.74
+    2. John Collins: 21.63
+    3. Lauri Markkanen: 16.96
+    4. Collin Sexton: 15.90
+    5. Keyonte George: 15.15
+
+24. Miami Heat (MIA):
+  Average Efficiency: 18.40
+  Top Players:
+    1. Bam Adebayo: 23.54
+    2. Tyler Herro: 23.17
+    3. Andrew Wiggins: 16.37
+    4. Kel'el Ware: 14.89
+    5. Davion Mitchell: 14.03
+
+25. Golden State Warriors (GSW):
+  Average Efficiency: 18.06
+  Top Players:
+    1. Stephen Curry: 23.50
+    2. Jimmy Butler III: 23.00
+    3. Draymond Green: 15.68
+    4. Brandin Podziemski: 14.48
+    5. Jonathan Kuminga: 13.62
+
+26. Orlando Magic (ORL):
+  Average Efficiency: 17.91
+  Top Players:
+    1. Paolo Banchero: 23.46
+    2. Franz Wagner: 22.82
+    3. Jalen Suggs: 14.91
+    4. Goga Bitadze: 14.24
+    5. Moritz Wagner: 14.10
+
+27. Charlotte Hornets (CHA):
+  Average Efficiency: 17.55
+  Top Players:
+    1. LaMelo Ball: 21.89
+    2. Miles Bridges: 20.77
+    3. Brandon Miller: 17.26
+    4. Jusuf Nurkić: 14.52
+    5. Grant Williams: 13.31
+
+28. Portland Trail Blazers (POR):
+  Average Efficiency: 17.32
+  Top Players:
+    1. Deandre Ayton: 20.60
+    2. Deni Avdija: 19.56
+    3. Anfernee Simons: 16.16
+    4. Shaedon Sharpe: 15.67
+    5. Toumani Camara: 14.63
+
+29. Brooklyn Nets (BKN):
+  Average Efficiency: 16.07
+  Top Players:
+    1. Cameron Johnson: 18.84
+    2. Cam Thomas: 18.32
+    3. Nic Claxton: 16.40
+    4. Drew Timme: 13.44
+    5. Day'Ron Sharpe: 13.36
+
+30. Washington Wizards (WAS):
+  Average Efficiency: 14.31
+  Top Players:
+    1. Jordan Poole: 17.26
+    2. Alex Sarr: 14.04
+    3. Bilal Coulibaly: 13.66
+    4. Malcolm Brogdon: 13.63
+    5. Richaun Holmes: 12.94
+
+League Average Efficiency: 19.61
+Highest Team Efficiency: 23.91 (Denver Nuggets)
+Lowest Team Efficiency: 14.31 (Washington Wizards)

@@ -1,0 +1,51 @@
+NBA Defensive Statistics and Win Percentage Analysis
+=================================================
+
+Correlation with Win Percentage:
+- Defensive Rebounds: 0.5997
+- Steals: 0.0149
+- Blocks: 0.1329
+- Personal Fouls: -0.2993
+- Composite Rating: 0.3383
+
+Team Statistics (Ranked by Win Percentage):
+------------------------------------------
+Team                      Abbr  Def Rating Reb/G    Stl/G    Blk/G    Win%    
+---------------------------------------------------------------------------
+Milwaukee Bucks           MIL   34.8625    37.75    7.22    4.89    0.6666
+Boston Celtics            BOS   35.1472    35.17    7.27    5.72    0.6528
+Denver Nuggets            DEN   32.6286    33.77    7.60    4.58    0.6418
+Philadelphia 76ers        PHI   35.0726    33.58    8.21    5.52    0.6248
+Phoenix Suns              PHX   32.9436    33.97    7.59    4.79    0.6202
+Los Angeles Clippers      LAC   32.6247    34.60    7.29    4.64    0.6010
+Miami Heat                MIA   30.6613    33.41    7.66    3.63    0.5806
+Dallas Mavericks          DAL   30.3862    33.75    6.45    4.36    0.5726
+Los Angeles Lakers        LAL   35.0581    34.94    7.57    5.45    0.5628
+Utah Jazz                 UTA   32.5023    35.26    6.50    4.99    0.5520
+Brooklyn Nets             BKN   33.0591    34.36    6.84    5.31    0.5258
+Memphis Grizzlies         MEM   36.8708    34.56    8.65    5.78    0.5256
+New York Knicks           NYK   31.8846    34.22    7.10    4.58    0.5042
+Golden State Warriors     GSW   32.8251    34.46    7.86    4.48    0.5034
+Toronto Raptors           TOR   34.1742    32.42    8.71    4.97    0.5002
+New Orleans Pelicans      NOP   33.0467    34.21    8.00    4.41    0.4794
+Indiana Pacers            IND   34.2121    32.64    7.68    5.76    0.4786
+Oklahoma City Thunder     OKC   33.8627    34.20    7.79    4.93    0.4786
+Sacramento Kings          SAC   30.9804    32.89    7.41    4.21    0.4748
+Minnesota Timberwolves    MIN   35.4438    33.44    8.43    5.65    0.4744
+Cleveland Cavaliers       CLE   31.3067    32.91    7.25    4.25    0.4684
+Atlanta Hawks             ATL   32.1955    33.55    7.30    4.69    0.4662
+Chicago Bulls             CHI   32.3711    33.39    7.90    4.35    0.4588
+Portland Trail Blazers    POR   31.6479    32.54    7.12    4.90    0.4086
+Orlando Magic             ORL   33.0513    33.87    7.47    4.83    0.4000
+Charlotte Hornets         CHA   32.2711    32.64    7.53    4.70    0.3842
+San Antonio Spurs         SAS   33.5231    34.07    7.21    5.15    0.3720
+Houston Rockets           HOU   32.7485    33.41    7.74    4.79    0.3718
+Washington Wizards        WAS   31.9369    33.51    7.22    4.72    0.3712
+Detroit Pistons           DET   30.8251    32.23    7.19    4.58    0.2478
+
+Regression Equation: Win% = 0.0212 × Defensive Rating + -0.2012
+
+Interpretation: There is a weak correlation between defensive rating and win percentage.
+
+Defensive Rating Formula:
+(2.0 × Blocks/Game + 1.5 × Steals/Game + 0.5 × Defensive Rebounds/Game - 0.25 × Fouls/Game)

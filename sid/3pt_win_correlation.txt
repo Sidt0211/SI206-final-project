@@ -1,0 +1,43 @@
+NBA 3-Point Shooting and Win Percentage Analysis
+==============================================
+
+Correlation between 3PT% and Win%: 0.7525
+
+Team Statistics (Ranked by Win Percentage):
+------------------------------------------
+Team                      Abbr  Avg 3PT%   Avg Win%  
+-------------------------------------------------------
+Milwaukee Bucks           MIL   0.3702    0.6666
+Boston Celtics            BOS   0.3718    0.6528
+Denver Nuggets            DEN   0.3684    0.6418
+Philadelphia 76ers        PHI   0.3712    0.6248
+Phoenix Suns              PHX   0.3712    0.6202
+Los Angeles Clippers      LAC   0.3836    0.6010
+Miami Heat                MIA   0.3660    0.5806
+Dallas Mavericks          DAL   0.3638    0.5726
+Los Angeles Lakers        LAL   0.3546    0.5628
+Utah Jazz                 UTA   0.3672    0.5520
+Brooklyn Nets             BKN   0.3672    0.5258
+Memphis Grizzlies         MEM   0.3506    0.5256
+New York Knicks           NYK   0.3618    0.5042
+Golden State Warriors     GSW   0.3678    0.5034
+Toronto Raptors           TOR   0.3546    0.5002
+New Orleans Pelicans      NOP   0.3594    0.4794
+Indiana Pacers            IND   0.3624    0.4786
+Oklahoma City Thunder     OKC   0.3524    0.4786
+Sacramento Kings          SAC   0.3614    0.4748
+Minnesota Timberwolves    MIN   0.3590    0.4744
+Cleveland Cavaliers       CLE   0.3552    0.4684
+Atlanta Hawks             ATL   0.3592    0.4662
+Chicago Bulls             CHI   0.3612    0.4588
+Portland Trail Blazers    POR   0.3636    0.4086
+Orlando Magic             ORL   0.3430    0.4000
+Charlotte Hornets         CHA   0.3542    0.3842
+San Antonio Spurs         SAS   0.3540    0.3720
+Houston Rockets           HOU   0.3424    0.3718
+Washington Wizards        WAS   0.3530    0.3712
+Detroit Pistons           DET   0.3486    0.2478
+
+Regression Equation: Win% = 8.1178 × 3PT% + -2.4286
+
+Interpretation: There is a strong positive correlation between 3-point shooting percentage and win percentage.
